@@ -35,7 +35,7 @@ bool joint_epos_command::first_step()
 
 	// parameters copying
 	get_mp_ecp_command();
-	sr_ecp_msg.message("legs_command: first_step");
+	sr_ecp_msg.message("joint_command: first_step");
 	epos_joint_command_data_port->data = mp_ecp_epos_simple_command;
 	epos_joint_command_data_port->set();
 	epos_joint_reply_data_request_port->set_request();
@@ -102,7 +102,7 @@ bool external_epos_command::first_step()
 
 	// parameters copying
 	get_mp_ecp_command();
-	sr_ecp_msg.message("legs_command: first_step");
+	sr_ecp_msg.message("external_command: first_step");
 	epos_external_command_data_port->data = mp_ecp_epos_simple_command;
 	epos_external_command_data_port->set();
 	epos_external_reply_data_request_port->set_data = lib::spkm::WRIST_XYZ_EULER_ZYZ;

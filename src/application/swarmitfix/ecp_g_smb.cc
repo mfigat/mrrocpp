@@ -82,7 +82,7 @@ bool stand_up::next_step()
 ////////////////////////////////////////////////////////
 
 rotate::rotate(task_t & _ecp_task,
-		const lib::smb::motor_command & cmd) :
+		const lib::smb::motion_command & cmd) :
 		generator_t(_ecp_task),
 		query_interval(boost::posix_time::milliseconds(20))
 {

@@ -396,20 +396,13 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_20">
-            <property name="text">
-             <string>dPkmTheta</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="1">
-           <widget class="QDoubleSpinBox" name="dPkmTheta_input">
+           <widget class="QDoubleSpinBox" name="pkmTheta_input">
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
             <property name="decimals">
-             <number>3</number>
+             <number>4</number>
             </property>
             <property name="minimum">
              <double>-15.000000000000000</double>
@@ -422,6 +415,13 @@
             </property>
             <property name="value">
              <double>0.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>pkmTheta</string>
             </property>
            </widget>
           </item>
@@ -572,7 +572,7 @@
            <double>4.000000000000000</double>
           </property>
           <property name="singleStep">
-           <double>0.010000000000000</double>
+           <double>0.001000000000000</double>
           </property>
          </widget>
         </item>

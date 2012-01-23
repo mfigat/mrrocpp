@@ -41,7 +41,7 @@ bool rotation_command::first_step()
 
 bool rotation_command::next_step()
 {
-	sr_ecp_msg.message("rotation_command: first_step");
+	//sr_ecp_msg.message("rotation_command: next_step");
 
 	the_robot->epos_joint_reply_data_request_port.get();
 
@@ -66,6 +66,46 @@ void rotation_command::get_mp_ecp_command()
 {
 	ecp_t.mp_command.ecp_next_state.sg_buf.get(mp_ecp_epos_simple_command);
 }
+
+////////////////////////////////////////////////////////
+//
+//                  vacuum_control
+//
+////////////////////////////////////////////////////////
+
+//constructor with parameters: task and time to sleep [s]
+vacuum_command::vacuum_command(task_t & _ecp_task) :
+		generator_t(_ecp_task)
+{
+}
+
+bool vacuum_command::first_step()
+{
+	sr_ecp_msg.message("vacuum_command: first_step");
+
+	// parameters copying
+	get_mp_ecp_command();
+
+	the_robot->vacuum_activation_data_port.data = enabled;
+	the_robot->vacuum_activation_data_port.set();
+
+	return true;
+}
+
+bool vacuum_command::next_step()
+{
+	return false;
+}
+
+void vacuum_command::create_ecp_mp_reply()
+{
+}
+
+void vacuum_command::get_mp_ecp_command()
+{
+	ecp_t.mp_command.ecp_next_state.sg_buf.get(enabled);
+}
+
 
 } // namespace generator
 } // namespace shead

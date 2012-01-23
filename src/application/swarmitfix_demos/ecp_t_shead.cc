@@ -24,10 +24,6 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 		// TODO: throw
 	}
 
-	// Create the generators
-
-	g_joint_epos_command = new shead::generator::rotation_command(*this);
-
 	sr_ecp_msg->message("ecp shead transparent loaded");
 }
 
@@ -36,8 +32,18 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 
 	if (mp_2_ecp_next_state_string == ecp_mp::shead::generator::ECP_JOINT_EPOS_COMMAND) {
 
-		g_joint_epos_command->Move();
+		shead::generator::rotation_command g_joint_epos_command(*this);
 
+		g_joint_epos_command.Move();
+
+	} else if (mp_2_ecp_next_state_string == ecp_mp::shead::generator::ECP_VACUMIZATION_COMMAND) {
+
+		shead::generator::vacuum_command g_vacuum(*this);
+
+		g_vacuum.Move();
+
+	} else {
+		assert(0);
 	}
 
 }

@@ -45,7 +45,7 @@ public:
 	/**
 	 * @brief epos external motion command data port
 	 */
-	lib::single_thread_port <lib::smb::motor_command> epos_external_command_data_port;
+	lib::single_thread_port <lib::smb::motion_command> epos_external_command_data_port;
 
 	/**
 	 * @brief epos brake command data port

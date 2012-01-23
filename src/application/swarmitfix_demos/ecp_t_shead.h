@@ -14,15 +14,6 @@ namespace task {
 
 class swarmitfix : public common::task::_task <ecp::shead::robot>
 {
-protected:
-	//! Move the robot the the specified pose
-//	boost::shared_ptr <generator::shead_pose> g_pose;
-
-//! Stop the robot in case of emergency
-//	boost::shared_ptr <generator::shead_quickstop> g_quickstop;
-
-	generator::rotation_command* g_joint_epos_command;
-
 public:
 	//! Constructor
 	swarmitfix(lib::configurator &_config);

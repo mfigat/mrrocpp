@@ -51,7 +51,7 @@ protected:
 	void executeCommandItem(const Plan::PkmType::ItemType & pkmCmd);
 
 	//! Handle BENCH+MBASE plan item.
-	void executeCommandItem(const Plan::MbaseType::ItemType & smbCmd);
+	void executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, int dir);
 
 	//! Save modified plan to file
 	void save_plan(const Plan & p);

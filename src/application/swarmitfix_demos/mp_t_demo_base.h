@@ -47,21 +47,12 @@ class demo_base : public mrrocpp::mp::task::task
 {
 
 protected:
-	//! Name of the SMB robot utilized (SMB1 or SMB2).
-	lib::robot_name_t smb_robot_name;
-
-	//! Name of the SPKM robot utilized (SPKM1 or SPKM2).
-	lib::robot_name_t spkm_robot_name;
-
-	//! Name of the SHEAD robot utilized (SHEAD1 or SHEAD2).
-	lib::robot_name_t shead_robot_name;
-
 	/*!
 	 * Sends motor rotation command to SMB in the joint space.
 	 * @param [in] legs_rotation_ Desired absolute rotation around leg (in external values -6, -5, ..., 5, 6).
 	 * @param [in] pkm_rotation_ Desired absolute rotation of the upper SMP by given angle [radians].
 	 */
-	void smb_rotate_external(int legs_rotation_, double pkm_rotation_);
+	void smb_rotate_external(const lib::robot_name_t & robot_name, int legs_rotation_, double pkm_rotation_);
 
 	/*!
 	 * Moves SMB legs in and out.
@@ -69,14 +60,14 @@ protected:
 	 * @param [in] l2_ Desired position of the leg two (in, out).
 	 * @param [in] l3_ Desired position of the leg three (in, out).
 	 */
-	void smb_pull_legs(lib::smb::FESTO_LEG l1_, lib::smb::FESTO_LEG l2_, lib::smb::FESTO_LEG l3_);
+	void smb_pull_legs(const lib::robot_name_t & robot_name, lib::smb::FESTO_LEG l1_, lib::smb::FESTO_LEG l2_, lib::smb::FESTO_LEG l3_);
 
 	/*!
 	 * @brief Stands on given leg (this one stays out, rest goes in).
 	 *
 	 * @param [in] leg_number_ Leg around which the rotation will be performed.
 	 */
-	void smb_stan_on_one_leg(int leg_number_);
+	void smb_stan_on_one_leg(const lib::robot_name_t & robot_name, int leg_number_);
 
 	/*!
 	 * @brief Rotates agent around given leg, thus realizes the sequence: pull two legs in, rotate around the third one and pull all legs out.
@@ -88,28 +79,35 @@ protected:
 	 * @param [in] leg_number_ Leg around which the rotation will be performed.
 	 * @param [in] rotation_ Rotation of the legs (in external values -6, -5, ..., 5, 6).
 	 */
-	void rotate_smb(int leg_number_, int rotation_);
+	void rotate_smb(const lib::robot_name_t & robot_name, int leg_number_, int rotation_);
 
 	/*!
 	 * Controls the head rotation.
 	 *
 	 * @param [in] joint_ Desired absolute position in the joint space.
 	 */
-	void move_shead_joints(double joint_);
+	void move_shead_joints(const lib::robot_name_t & robot_name, double joint_);
+
+	/*!
+	 * Controls the head vacuum.
+	 *
+	 * @param [in] enabled state of the vacuum.
+	 */
+	void shead_vacuum(const lib::robot_name_t & robot_name, bool enabled);
 
 	/*!
 	 * Moves the PKM to the desired position in the joint space
 	 *
 	 * @param [in] motion_variant_ Variant of the motion to be executed (here only NON_SYNC_TRAPEZOIDAL, SYNC_TRAPEZOIDAL are available).
 	 */
-	void move_spkm_joints(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, double legA_, double legB_, double legC_, double wrist1_, double wrist2_, double wrist3_);
+	void move_spkm_joints(const lib::robot_name_t & robot_name, mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, double legA_, double legB_, double legC_, double wrist1_, double wrist2_, double wrist3_);
 
 	/*!
 	 * Moves the PKM to the desired pose in the cartesian space.
 	 *
 	 * @param [in] motion_variant_ Variant of the motion to be executed (here NON_SYNC_TRAPEZOIDAL, SYNC_TRAPEZOIDAL, OPERATIONAL are available).
 	 */
-	void move_spkm_external(mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, const lib::Xyz_Euler_Zyz_vector & pose_);
+	void move_spkm_external(const lib::robot_name_t & robot_name, mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, const lib::Xyz_Euler_Zyz_vector & pose_);
 
 	/*!
 	 * @brief Method responsible for supporting the plate in give point and return.
@@ -121,7 +119,7 @@ protected:
 	 * @param smb_joint_ - rotation of the SMB (the motor rotating the upper SMB plate).
 	 * @param shead_joint - rotation of the SHEAD.
 	 */
-	void move_to_pose_and_return(
+	void move_to_pose_and_return(const lib::robot_name_t & robot_name,
 			const lib::Xyz_Euler_Zyz_vector & support_pose_,
 			const lib::Xyz_Euler_Zyz_vector & inter_pose_,
 			double smb_joint_, double shead_joint_);
@@ -149,12 +147,12 @@ protected:
 	/*!
 	 * Controls the bench power with rotation of the smb leg.
 	 */
-	void smb_execute_power_move(const power_smb_move & move_, unsigned int delay_);
+	void smb_execute_power_move(const lib::robot_name_t & robot_name, const power_smb_move & move_, unsigned int delay_);
 
 	/*!
 	 * Controls the bench power and cleaning with rotation of the smb leg.
 	 */
-	void smb_execute_power_move_with_cleaning(const power_smb_move & move_, unsigned int delay_, unsigned int cleaning_time_);
+	void smb_execute_power_move_with_cleaning(const lib::robot_name_t & robot_name, const power_smb_move & move_, unsigned int delay_, unsigned int cleaning_time_);
 
 
 public:

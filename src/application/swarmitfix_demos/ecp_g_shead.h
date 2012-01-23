@@ -43,6 +43,27 @@ public:
 	void get_mp_ecp_command();
 };
 
+class vacuum_command : public common::generator::_generator <ecp::shead::robot>
+{
+private:
+
+	lib::shead::VACUUM_ACTIVATION enabled;
+
+public:
+
+	/**
+	 * @brief Constructor
+	 * @param _ecp_task ecp task object reference.
+	 */
+	vacuum_command(task_t & _ecp_task);
+
+	bool first_step();
+	bool next_step();
+
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
+};
+
 } // namespace generator
 } // namespace shead
 } // namespace ecp

@@ -2,7 +2,6 @@
 #define _ECP_T_SMB_SWARM_DEMO_SINGLE_AGENT_H
 
 #include "base/ecp/ecp_task.h"
-#include "base/ecp/ecp_g_transparent.h"
 
 namespace mrrocpp {
 namespace ecp {
@@ -11,13 +10,6 @@ namespace task {
 
 class swarmitfix : public common::task::_task <ecp::smb::robot>
 {
-protected:
-	//generatory
-	common::generator::transparent* gt;
-	common::generator::sleep* g_sleep;
-	generator::legs_command* g_legs_command;
-	generator::external_epos_command* g_external_epos_command;
-
 public:
 	// KONSTRUKTORY
 	swarmitfix(lib::configurator &_config);

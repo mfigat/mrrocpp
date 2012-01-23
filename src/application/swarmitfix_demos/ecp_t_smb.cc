@@ -34,13 +34,9 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 		// TODO: throw?
 	}
 
-//	gt = new common::generator::transparent(*this);
 
-	g_sleep = new common::generator::sleep(*this);
 
-	g_legs_command = new smb::generator::legs_command(*this);
 
-	g_external_epos_command = new smb::generator::external_epos_command(*this);
 
 	sr_ecp_msg->message("ecp smb transparent loaded");
 }
@@ -48,17 +44,18 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_TRANSPARENT) {
-		gt->throw_kinematics_exceptions = (bool) mp_command.ecp_next_state.variant;
-		gt->Move();
+	if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_LEGS_COMMAND) {
 
-	} else if (mp_2_ecp_next_state_string == ecp_mp::generator::ECP_GEN_SLEEP) {
-		g_sleep->init_time(mp_command.ecp_next_state.variant);
-		g_sleep->Move();
-	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_LEGS_COMMAND) {
-		g_legs_command->Move();
+		smb::generator::legs_command g_legs(*this);
+
+		g_legs.Move();
+
 	} else if (mp_2_ecp_next_state_string == ecp_mp::smb::generator::ECP_EXTERNAL_EPOS_COMMAND) {
-		g_external_epos_command->Move();
+
+		smb::generator::external_epos_command g_external(*this);
+
+		g_external.Move();
+
 	}
 
 }

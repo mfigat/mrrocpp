@@ -110,7 +110,7 @@ void swarmitfix::execute_actions(const lib::smb::next_state_t::action_sequence_t
 		// Rotate
 		{
 			// Setup EDP command
-			lib::smb::motor_command cmd;
+			lib::smb::motion_command cmd;
 
 			// Copy parameters
 			//cmd.base_vs_bench_rotation = act.getdThetaInd();

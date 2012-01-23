@@ -105,7 +105,7 @@ void wgt_plan::reload()
 
 				checkInputWidgetLimits(*ui->pin_input, item.actions().item().front().pin());
 				checkInputWidgetLimits(*ui->dThetaInd_input, item.actions().item().front().dThetaInd());
-				checkInputWidgetLimits(*ui->dPkmTheta_input, item.actions().item().front().dPkmTheta());
+				checkInputWidgetLimits(*ui->pkmTheta_input, item.pkmTheta());
 
 				// Setup common frame
 				ui->agent_input->setValue(item.agent());
@@ -130,7 +130,7 @@ void wgt_plan::reload()
 				// Disable rotation input widget if rotation pin is set to zero.
 				ui->dThetaInd_input->setEnabled(item.actions().item().front().pin() ? true : false);
 
-				ui->dPkmTheta_input->setValue(item.actions().item().front().dPkmTheta());
+				ui->pkmTheta_input->setValue(item.pkmTheta());
 			}
 
 			// Disable/enable input containers
@@ -224,7 +224,7 @@ void wgt_plan::on_pushButton_exec_clicked()
 
 				item.actions().item().front().pin() = ui->pin_input->value();
 				item.actions().item().front().dThetaInd() = ui->dThetaInd_input->value();
-				item.actions().item().front().dPkmTheta() = ui->dPkmTheta_input->value();
+				item.pkmTheta() = ui->pkmTheta_input->value();
 
 				// serialize data
 				os << item;

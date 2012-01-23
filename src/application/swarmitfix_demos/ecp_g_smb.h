@@ -51,7 +51,7 @@ public:
 class external_epos_command : public common::generator::_generator <ecp::smb::robot>
 {
 private:
-	lib::smb::motor_command mp_ecp_epos_simple_command;
+	lib::smb::motion_command mp_ecp_epos_simple_command;
 
 public:
 	/**

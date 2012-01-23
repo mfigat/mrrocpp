@@ -67,14 +67,14 @@ public:
 	 * @brief Constructor
 	 * @param _ecp_task ecp task object reference.
 	 */
-	rotate(task_t & _ecp_task, const lib::smb::motor_command & cmd);
+	rotate(task_t & _ecp_task, const lib::smb::motion_command & cmd);
 
 	bool first_step();
 
 	bool next_step();
 
 private:
-	lib::smb::motor_command simple_command;
+	lib::smb::motion_command simple_command;
 
 	//! Wakeup timer
 	boost::system_time wakeup;

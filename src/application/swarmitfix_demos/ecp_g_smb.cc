@@ -71,12 +71,13 @@ external_epos_command::external_epos_command(task_t & _ecp_task) :
 
 bool external_epos_command::first_step()
 {
-
 	// parameters copying
 	get_mp_ecp_command();
 	sr_ecp_msg.message("legs_command: first_step");
+
 	the_robot->epos_external_command_data_port.data = mp_ecp_epos_simple_command;
 	the_robot->epos_external_command_data_port.set();
+
 	the_robot->epos_external_reply_data_request_port.set_request();
 
 	return true;
@@ -84,8 +85,6 @@ bool external_epos_command::first_step()
 
 bool external_epos_command::next_step()
 {
-	// waits 20ms to check epos state
-	delay(20);
 	the_robot->epos_external_reply_data_request_port.get();
 
 	bool motion_in_progress = false;
@@ -98,12 +97,15 @@ bool external_epos_command::next_step()
 	}
 
 	if (motion_in_progress) {
+		// waits 20ms to check epos state
+		delay(20);
+
 		the_robot->epos_external_reply_data_request_port.set_request();
 		return true;
-	} else {
-		return false;
 	}
 
+	// Motion finished.
+	return false;
 }
 
 void external_epos_command::create_ecp_mp_reply()

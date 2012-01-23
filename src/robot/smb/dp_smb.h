@@ -228,7 +228,7 @@ private:
  * @brief SwarmItFix Epos motor and joint and external command, called from UI
  * @ingroup smb
  */
-struct motor_command
+struct motion_command
 {
 	//! Rotation of the legs (in external values -6, -5, ..., 5, 6).
 	int base_vs_bench_rotation;
@@ -240,7 +240,7 @@ struct motor_command
 	double estimated_time;
 
 	//! Constructor to initialize "safe" command.
-	motor_command();
+	motion_command();
 
 private:
 	//! Give access to boost::serialization framework.

@@ -96,7 +96,7 @@ festo_command_td::festo_command_td()
 	}
 }
 
-motor_command::motor_command() :
+motion_command::motion_command() :
 		base_vs_bench_rotation(0), pkm_vs_base_rotation(0.0), estimated_time(0.0)
 {
 }

@@ -115,7 +115,7 @@ void effector::synchronise(void)
 
 void effector::check_controller_state()
 {
-	DEBUG_METHOD;
+	//DEBUG_METHOD;
 
 	if (robot_test_mode) {
 		// In test mode robot is always synchronized.
@@ -452,7 +452,7 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 {
-	DEBUG_METHOD;
+	//DEBUG_METHOD;
 
 	try {
 		// Check controller state.

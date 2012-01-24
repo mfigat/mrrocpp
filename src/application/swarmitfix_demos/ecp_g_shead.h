@@ -64,6 +64,28 @@ public:
 	void get_mp_ecp_command();
 };
 
+
+class solidify_command : public common::generator::_generator <ecp::shead::robot>
+{
+private:
+
+	lib::shead::SOLIDIFICATION_ACTIVATION enabled;
+
+public:
+
+	/**
+	 * @brief Constructor
+	 * @param _ecp_task ecp task object reference.
+	 */
+	solidify_command(task_t & _ecp_task);
+
+	bool first_step();
+	bool next_step();
+
+	void create_ecp_mp_reply();
+	void get_mp_ecp_command();
+};
+
 } // namespace generator
 } // namespace shead
 } // namespace ecp

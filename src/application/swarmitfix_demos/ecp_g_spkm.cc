@@ -18,7 +18,6 @@ namespace generator {
 //
 ////////////////////////////////////////////////////////
 
-//constructor with parameters: task and time to sleep [s]
 joint_epos_command::joint_epos_command(task_t & _ecp_task) :
 		generator_t(_ecp_task)
 {
@@ -85,7 +84,6 @@ void joint_epos_command::get_mp_ecp_command()
 //
 ////////////////////////////////////////////////////////
 
-//constructor with parameters: task and time to sleep [s]
 external_epos_command::external_epos_command(task_t & _ecp_task) :
 		generator_t(_ecp_task)
 {
@@ -148,8 +146,32 @@ void external_epos_command::get_mp_ecp_command()
 //	memcpy(&mp_ecp_epos_simple_command, ecp_t.mp_command.ecp_next_state.sg_buf.data, sizeof(mp_ecp_epos_simple_command));
 }
 
+////////////////////////////////////////////////////////
+//
+//                  brake_command
+//
+////////////////////////////////////////////////////////
+
+brake_command::brake_command(task_t & _ecp_task) :
+		generator_t(_ecp_task)
+{
+}
+
+bool brake_command::first_step()
+{
+	sr_ecp_msg.message("brake_command: first_step");
+
+	the_robot->epos_brake_command_data_port.set();
+
+	return true;
+}
+
+bool brake_command::next_step()
+{
+	return false;
+}
+
 } // namespace generator
 } // namespace spkm
 } // namespace ecp
 } // namespace mrrocpp
-

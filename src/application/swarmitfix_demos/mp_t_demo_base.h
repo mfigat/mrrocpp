@@ -96,6 +96,13 @@ protected:
 	void shead_vacuum(const lib::robot_name_t & robot_name, bool enabled);
 
 	/*!
+	 * Controls the head solidification.
+	 *
+	 * @param [in] enabled state of the solidification.
+	 */
+	void shead_solidify(const lib::robot_name_t & robot_name, bool enabled);
+
+	/*!
 	 * Moves the PKM to the desired position in the joint space
 	 *
 	 * @param [in] motion_variant_ Variant of the motion to be executed (here only NON_SYNC_TRAPEZOIDAL, SYNC_TRAPEZOIDAL are available).
@@ -108,6 +115,11 @@ protected:
 	 * @param [in] motion_variant_ Variant of the motion to be executed (here NON_SYNC_TRAPEZOIDAL, SYNC_TRAPEZOIDAL, OPERATIONAL are available).
 	 */
 	void move_spkm_external(const lib::robot_name_t & robot_name, mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, const lib::Xyz_Euler_Zyz_vector & pose_);
+
+	/*!
+	 * Brake the moog motor.
+	 */
+	void spkm_brake(const lib::robot_name_t & robot_name);
 
 	/*!
 	 * @brief Method responsible for supporting the plate in give point and return.

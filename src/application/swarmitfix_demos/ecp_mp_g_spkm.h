@@ -8,6 +8,7 @@ namespace generator {
 
 const std::string ECP_JOINT_EPOS_COMMAND = "ECP_JOINT_EPOS_COMMAND";
 const std::string ECP_EXTERNAL_EPOS_COMMAND = "ECP_EXTERNAL_EPOS_COMMAND";
+const std::string ECP_BRAKE_COMMAND = "ECP_BRAKE_COMMAND";
 
 } // namespace generator
 } // namespace spkm

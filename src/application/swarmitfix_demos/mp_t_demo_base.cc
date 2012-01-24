@@ -141,6 +141,24 @@ void demo_base::shead_vacuum(const lib::robot_name_t & robot_name, bool enabled)
 	wait_for_task_termination(false, 1, robot_name.c_str());
 }
 
+
+void demo_base::shead_solidify(const lib::robot_name_t & robot_name, bool enabled)
+{
+	lib::shead::SOLIDIFICATION_ACTIVATION state = (enabled) ? lib::shead::SOLIDIFICATION_ON : lib::shead::SOLIDIFICATION_OFF;
+
+	set_next_ecp_state(ecp_mp::shead::generator::ECP_SOLIDIFICATION_COMMAND, 0, state, robot_name);
+	wait_for_task_termination(false, 1, robot_name.c_str());
+}
+
+
+void demo_base::spkm_brake(const lib::robot_name_t & robot_name)
+{
+	bool foo = 0;
+
+	set_next_ecp_state(ecp_mp::spkm::generator::ECP_BRAKE_COMMAND, 0, foo, robot_name);
+	wait_for_task_termination(false, 1, robot_name.c_str());
+}
+
 void demo_base::move_spkm_joints(const lib::robot_name_t & robot_name, mrrocpp::lib::epos::EPOS_MOTION_VARIANT motion_variant_, double legA_, double legB_, double legC_, double wrist1_, double wrist2_, double wrist3_)
 {
 	lib::epos::epos_simple_command mp_ecp_spkm_epos_simple_command;

@@ -42,6 +42,12 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 
 		g_vacuum.Move();
 
+	} else if (mp_2_ecp_next_state_string == ecp_mp::shead::generator::ECP_SOLIDIFICATION_COMMAND) {
+
+		shead::generator::solidify_command g_solidify(*this);
+
+		g_solidify.Move();
+
 	} else {
 		assert(0);
 	}

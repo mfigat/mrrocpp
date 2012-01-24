@@ -106,6 +106,45 @@ void vacuum_command::get_mp_ecp_command()
 	ecp_t.mp_command.ecp_next_state.sg_buf.get(enabled);
 }
 
+////////////////////////////////////////////////////////
+//
+//                  solidify_control
+//
+////////////////////////////////////////////////////////
+
+//constructor with parameters: task and time to sleep [s]
+solidify_command::solidify_command(task_t & _ecp_task) :
+		generator_t(_ecp_task)
+{
+}
+
+bool solidify_command::first_step()
+{
+	sr_ecp_msg.message("solidify_command: first_step");
+
+	// parameters copying
+	get_mp_ecp_command();
+
+	the_robot->solidification_data_port.data = enabled;
+	the_robot->solidification_data_port.set();
+
+	return true;
+}
+
+bool solidify_command::next_step()
+{
+	return false;
+}
+
+void solidify_command::create_ecp_mp_reply()
+{
+}
+
+void solidify_command::get_mp_ecp_command()
+{
+	ecp_t.mp_command.ecp_next_state.sg_buf.get(enabled);
+}
+
 
 } // namespace generator
 } // namespace shead

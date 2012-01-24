@@ -22,12 +22,8 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 		ecp_m_robot = (boost::shared_ptr <robot_t>) new spkm2::robot(*this);
 	} else {
 		// TODO: throw
+		assert(0);
 	}
-
-	// Create the generators
-
-	g_joint_epos_command = new spkm::generator::joint_epos_command(*this);
-	g_external_epos_command = new spkm::generator::external_epos_command(*this);
 
 	sr_ecp_msg->message("ecp spkm transparent loaded");
 }
@@ -37,13 +33,24 @@ void swarmitfix::mp_2_ecp_next_state_string_handler(void)
 
 	if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_JOINT_EPOS_COMMAND) {
 
-		g_joint_epos_command->Move();
+		spkm::generator::joint_epos_command g_joint(*this);
+		g_joint.Move();
 
-	}
+	} else if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_EXTERNAL_EPOS_COMMAND) {
 
-	if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_EXTERNAL_EPOS_COMMAND) {
+		spkm::generator::external_epos_command g_external(*this);
 
-		g_external_epos_command->Move();
+		g_external.Move();
+
+	} else if (mp_2_ecp_next_state_string == ecp_mp::spkm::generator::ECP_BRAKE_COMMAND) {
+
+		spkm::generator::brake_command g_brake(*this);
+
+		g_brake.Move();
+
+	} else {
+
+		assert(0);
 
 	}
 

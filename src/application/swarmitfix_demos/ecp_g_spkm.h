@@ -91,6 +91,19 @@ public:
 	void get_mp_ecp_command();
 };
 
+class brake_command : public common::generator::_generator <ecp::spkm::robot>
+{
+public:
+	/**
+	 * @brief Constructor
+	 * @param _ecp_task ecp task object reference.
+	 */
+	brake_command(task_t & _ecp_task);
+
+	bool first_step();
+	bool next_step();
+};
+
 } // namespace generator
 } // namespace spkm
 } // namespace ecp

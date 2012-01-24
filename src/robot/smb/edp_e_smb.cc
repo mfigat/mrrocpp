@@ -178,7 +178,7 @@ void effector::synchronise(void)
 
 void effector::check_controller_state()
 {
-	DEBUG_METHOD;
+	//DEBUG_METHOD;
 
 	if (robot_test_mode) {
 		// In test mode robot is always synchronized.
@@ -612,7 +612,7 @@ void effector::execute_motor_motion()
 
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 {
-	DEBUG_METHOD;
+	//DEBUG_METHOD;
 
 	try {
 		// Check controller state.
@@ -624,7 +624,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 			{
 
 				case lib::smb::MOTOR:
-					DEBUG_COMMAND("MOTOR");
+					//DEBUG_COMMAND("MOTOR");
 
 					// For every axis.
 					for (size_t i = 0; i < number_of_servos; ++i) {
@@ -677,7 +677,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 					}
 					break;
 				case lib::smb::EXTERNAL:
-					DEBUG_COMMAND("EXTERNAL");
+					//DEBUG_COMMAND("EXTERNAL");
 
 					// For every axis.
 					for (size_t i = 0; i < axes.size(); ++i) {

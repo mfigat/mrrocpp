@@ -624,11 +624,6 @@ void effector::move_arm(const lib::c_buffer &instruction_)
 
 				// Execute brake command.
 				if(!robot_test_mode) {
-					disable_moog_motor();
-				}
-
-				// Execute brake command.
-				if(!robot_test_mode) {
 					enable_moog_brake(true);
 				}
 
@@ -1427,7 +1422,7 @@ void effector::interpolated_motion_in_operational_space()
 
 void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 {
-	DEBUG_METHOD;
+	//DEBUG_METHOD;
 /*	std::cerr<<"\nisTargetReached: (";
 	BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes) {
 		std::cerr<<node->isTargetReached() << ",";
@@ -1443,7 +1438,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 			switch (instruction.spkm.get_pose_specification)
 			{
 				case lib::spkm::MOTOR: {
-					DEBUG_COMMAND("MOTOR");
+					//DEBUG_COMMAND("MOTOR");
 					for (size_t i = 0; i < axes.size(); ++i) {
 						if (robot_test_mode) {
 							reply.spkm.epos_controller[i].position = current_motor_pos[i];
@@ -1459,7 +1454,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 				}
 					break;
 				case lib::spkm::JOINT: {
-					DEBUG_COMMAND("JOINT");
+					//DEBUG_COMMAND("JOINT");
 					// Read actual values from the hardware.
 					if (!robot_test_mode) {
 						for (size_t i = 0; i < axes.size(); ++i) {
@@ -1479,7 +1474,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 				}
 					break;
 				case lib::spkm::WRIST_XYZ_EULER_ZYZ: {
-					DEBUG_COMMAND("WRIST_XYZ_EULER_ZYZ");
+					//DEBUG_COMMAND("WRIST_XYZ_EULER_ZYZ");
 					// Return current end-effector pose if it is known (last motion was performed in the cartesian space).
 					if (!is_current_cartesian_pose_known)
 						current_end_effector_frame.setIdentity();
@@ -1502,7 +1497,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 				}
 					break;
 				case lib::spkm::TOOL_XYZ_EULER_ZYZ: {
-					DEBUG_COMMAND("TOOL_XYZ_EULER_ZYZ");
+					//DEBUG_COMMAND("TOOL_XYZ_EULER_ZYZ");
 					// Return current end-effector pose if it is known (last motion was performed in the cartesian space).
 					if (!is_current_cartesian_pose_known)
 						current_spkm_frame.setIdentity();

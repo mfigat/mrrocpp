@@ -8,6 +8,7 @@
 #include <fstream>
 
 #include <boost/foreach.hpp>
+#include <boost/thread/thread.hpp>
 
 #include "mp_t_single_agent_plan.h"
 
@@ -84,13 +85,17 @@ void single_agent_demo::executeCommandItem(const Plan::PkmType::ItemType & pkmCm
 
 	// PRE-head command;
 	if(is_robot_activated(shead_robot_name)) {
+
+		// Disable solidification and vacuum.
+		shead_solidify(shead_robot_name, false);
+		shead_vacuum(shead_robot_name, false);
+
 		switch(pkmCmd.ind() % 100) {
 			case 0:
 			case 80:
 				move_shead_joints(shead_robot_name, head_pose);
 				break;
 			default:
-				shead_vacuum(shead_robot_name, false);
 				break;
 		}
 	}
@@ -102,7 +107,14 @@ void single_agent_demo::executeCommandItem(const Plan::PkmType::ItemType & pkmCm
 	if(is_robot_activated(shead_robot_name)) {
 		switch(pkmCmd.ind() % 100) {
 			case 0:
-				shead_vacuum(shead_robot_name, true);
+				// Apply vacuum...
+				shead_vacuum(shead_robot_name, true); // FIXME: turn on the vacuum.
+				// ...wait a while...
+				boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+				// ...apply solidification...
+				shead_solidify(shead_robot_name, true); // FIXME: turn on the solidification.
+				// ...and brake.
+				spkm_brake(spkm_robot_name);
 				break;
 			default:
 				break;

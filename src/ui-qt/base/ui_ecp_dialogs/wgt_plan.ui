@@ -21,7 +21,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QFrame" name="frame_2">
+    <widget class="QFrame" name="upper_frame">
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -30,7 +30,7 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <widget class="QFrame" name="frame_3">
+       <widget class="QFrame" name="planItem_frame">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
@@ -87,6 +87,19 @@
            </property>
           </widget>
          </item>
+         <item row="2" column="0">
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_2">
            <property name="text">
@@ -101,6 +114,9 @@
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="suffix">
+            <string> s</string>
            </property>
            <property name="decimals">
             <number>3</number>
@@ -125,6 +141,9 @@
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
+           <property name="suffix">
+            <string> s</string>
+           </property>
            <property name="decimals">
             <number>3</number>
            </property>
@@ -136,24 +155,21 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+         <item row="5" column="1">
+          <widget class="QPlainTextEdit" name="comment_input"/>
+         </item>
+         <item row="5" column="0">
+          <widget class="QPushButton" name="pushbutton_clearComment">
+           <property name="text">
+            <string>Clear comment</string>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
+          </widget>
          </item>
         </layout>
        </widget>
       </item>
       <item>
-       <widget class="QFrame" name="frame">
+       <widget class="QFrame" name="navigation_frame">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
           <horstretch>0</horstretch>
@@ -181,6 +197,30 @@
            </item>
            <item>
             <widget class="QPushButton" name="pushButton_next"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QPushButton" name="pushbutton_copy">
+             <property name="text">
+              <string>Copy</string>
+             </property>
+             <property name="shortcut">
+              <string>Ctrl+C</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushbutton_paste">
+             <property name="text">
+              <string>Paste</string>
+             </property>
+             <property name="shortcut">
+              <string>Ctrl+V</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -401,6 +441,9 @@
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
+            <property name="suffix">
+             <string> rad</string>
+            </property>
             <property name="decimals">
              <number>4</number>
             </property>
@@ -411,7 +454,7 @@
              <double>15.000000000000000</double>
             </property>
             <property name="singleStep">
-             <double>0.100000000000000</double>
+             <double>0.010000000000000</double>
             </property>
             <property name="value">
              <double>0.000000000000000</double>
@@ -451,8 +494,17 @@
         </item>
         <item row="0" column="1">
          <widget class="QDoubleSpinBox" name="x_input">
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+          <property name="keyboardTracking">
+           <bool>false</bool>
+          </property>
+          <property name="suffix">
+           <string> m</string>
           </property>
           <property name="decimals">
            <number>4</number>
@@ -464,7 +516,7 @@
            <double>1.000000000000000</double>
           </property>
           <property name="singleStep">
-           <double>0.005000000000000</double>
+           <double>0.002500000000000</double>
           </property>
          </widget>
         </item>
@@ -480,6 +532,12 @@
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
+          <property name="keyboardTracking">
+           <bool>false</bool>
+          </property>
+          <property name="suffix">
+           <string> m</string>
+          </property>
           <property name="decimals">
            <number>4</number>
           </property>
@@ -490,7 +548,7 @@
            <double>1.000000000000000</double>
           </property>
           <property name="singleStep">
-           <double>0.005000000000000</double>
+           <double>0.002500000000000</double>
           </property>
          </widget>
         </item>
@@ -506,6 +564,12 @@
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
+          <property name="keyboardTracking">
+           <bool>false</bool>
+          </property>
+          <property name="suffix">
+           <string> m</string>
+          </property>
           <property name="decimals">
            <number>4</number>
           </property>
@@ -513,7 +577,7 @@
            <double>1.000000000000000</double>
           </property>
           <property name="singleStep">
-           <double>0.005000000000000</double>
+           <double>0.002500000000000</double>
           </property>
          </widget>
         </item>
@@ -529,6 +593,12 @@
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
+          <property name="keyboardTracking">
+           <bool>false</bool>
+          </property>
+          <property name="suffix">
+           <string> rad</string>
+          </property>
           <property name="decimals">
            <number>4</number>
           </property>
@@ -539,7 +609,7 @@
            <double>4.000000000000000</double>
           </property>
           <property name="singleStep">
-           <double>0.010000000000000</double>
+           <double>0.001000000000000</double>
           </property>
          </widget>
         </item>
@@ -562,6 +632,12 @@
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
+          <property name="keyboardTracking">
+           <bool>false</bool>
+          </property>
+          <property name="suffix">
+           <string> rad</string>
+          </property>
           <property name="decimals">
            <number>4</number>
           </property>
@@ -581,6 +657,12 @@
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
+          <property name="keyboardTracking">
+           <bool>false</bool>
+          </property>
+          <property name="suffix">
+           <string> rad</string>
+          </property>
           <property name="decimals">
            <number>4</number>
           </property>
@@ -591,7 +673,7 @@
            <double>4.000000000000000</double>
           </property>
           <property name="singleStep">
-           <double>0.010000000000000</double>
+           <double>0.001000000000000</double>
           </property>
          </widget>
         </item>
@@ -607,6 +689,12 @@
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
           </property>
+          <property name="keyboardTracking">
+           <bool>false</bool>
+          </property>
+          <property name="suffix">
+           <string> rad</string>
+          </property>
           <property name="decimals">
            <number>4</number>
           </property>
@@ -617,7 +705,7 @@
            <double>4.000000000000000</double>
           </property>
           <property name="singleStep">
-           <double>0.010000000000000</double>
+           <double>0.001000000000000</double>
           </property>
          </widget>
         </item>

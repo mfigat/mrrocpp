@@ -184,6 +184,11 @@
   </xs:element>
   <xs:complexType name="State">
     <xs:sequence>
+      <xs:element minOccurs="0" name="comment" type="xs:string">
+        <xs:annotation>
+          <xs:documentation>Commentary text</xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="agent">
         <xs:annotation>
           <xs:documentation>index of the agent

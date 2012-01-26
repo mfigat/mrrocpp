@@ -505,9 +505,14 @@ void effector::synchronise(void)
 			usleep(20000);
 		} while (!finished);
 
-		// Do homing for Moog motor.
+		// Limit acceleration for velocity mode.
 		axis2->setMaxAcceleration(5000);
+
+		// Do homing for Moog motor.
 		axis2->doSoftwareHoming(PARAMS.moog_motor_homing_velocity, PARAMS.moog_motor_homing_offset, PARAMS.moog_motor_home_position);
+
+		// Restore original acceleration limit.
+		axis2->setMaxAcceleration(MotorAmax[4]);
 
 		// Do homing for another motor.
 		axis1->setOperationMode(maxon::epos::OMD_HOMING_MODE);
@@ -532,10 +537,13 @@ void effector::synchronise(void)
 			usleep(20000);
 		}
 #else
-		// Setup acceleration.
+		// Limit acceleration for velocity mode.
 		axis3->setMaxAcceleration(5000);
 		// Do homing for axis3 motor.
 		axis3->doSoftwareHoming(PARAMS.axis3_motor_homing_velocity, PARAMS.axis3_motor_homing_offset);
+
+		// Restore original acceleration limit.
+		axis3->setMaxAcceleration(MotorAmax[5]);
 #endif
 
 

@@ -634,7 +634,7 @@ int Interface::wait_for_child_termination(pid_t pid, bool hang)
 	return status;
 }
 
-common::robots_t Interface::getRobots() const
+const common::robots_t & Interface::getRobots() const
 {
 	return robot_m;
 }

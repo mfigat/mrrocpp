@@ -256,7 +256,7 @@ lib::UI_TO_ECP_REPLY single_agent_demo::step_mode(Pkm::ItemType & item)
 		BOOST_THROW_EXCEPTION(lib::exception::system_error());
 	}
 
-	if(ui_to_ecp_rep.reply == lib::PLAN_EXEC) {
+	if((ui_to_ecp_rep.reply == lib::PLAN_EXEC) || (ui_to_ecp_rep.reply == lib::PLAN_SAVE)) {
 		std::istringstream istr(ui_to_ecp_rep.plan_item_string);
 		boost::archive::text_iarchive ia(istr);
 		xml_schema::istream<boost::archive::text_iarchive> is (ia);

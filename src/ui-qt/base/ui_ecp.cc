@@ -53,8 +53,8 @@ ecp_buffer::ecp_buffer(Interface& _interface) :
 
 ecp_buffer::~ecp_buffer()
 {
-	// thread_id.interrupt();
-	// thread_id.join(); // join it
+	 thread_id.interrupt();
+	 thread_id.join(); // join it
 }
 
 void ecp_buffer::operator()()

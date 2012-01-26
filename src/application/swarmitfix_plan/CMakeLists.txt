@@ -3,7 +3,13 @@ include(FindXerces)
 
 if(XSD_FOUND AND XERCES_FOUND)
 
-XSD_SCHEMA( PLAN_SRCS plan.xsd --type-naming ucc --root-element plan --generate-serialization --generate-ostream --hxx-prologue-file ${CMAKE_CURRENT_SOURCE_DIR}/plan-prologue.hxx --generate-insertion boost::archive::text_oarchive --generate-extraction boost::archive::text_iarchive )
+XSD_SCHEMA( PLAN_SRCS plan.xsd 
+    --type-naming ucc --root-element plan
+    --generate-serialization --generate-ostream
+    --hxx-prologue-file ${CMAKE_CURRENT_SOURCE_DIR}/plan-prologue.hxx
+    --generate-insertion boost::archive::text_oarchive
+    --generate-extraction boost::archive::text_iarchive
+    )
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}) # for the "plan.hxx"
 

@@ -10,6 +10,7 @@
 
 #include <QObject>
 #include <QMenu>
+
 #include "../base/ui.h"
 #include "../base/ui_robot.h"
 

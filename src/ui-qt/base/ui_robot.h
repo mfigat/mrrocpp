@@ -10,9 +10,12 @@
 
 #include <QObject>
 #include <QMenu>
-#include "ui.h"
+
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_robot.h"
+#include "base/ecp/ecp_exceptions.h"
+
+#include "ui.h"
 #include "wgt_base.h"
 
 class QDockWidget;

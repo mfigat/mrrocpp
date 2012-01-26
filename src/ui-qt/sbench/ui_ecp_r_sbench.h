@@ -1,5 +1,5 @@
-#ifndef _UI_ECP_R_SMB_H
-#define _UI_ECP_R_SMB_H
+#ifndef _UI_ECP_R_SBENCH_H
+#define _UI_ECP_R_SBENCH_H
 
 /*!
  * @file

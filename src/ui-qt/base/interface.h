@@ -123,7 +123,7 @@ public:
 	// lista nazw programow i wezlow na ktorych maja byc uruchamiane
 	std::list <program_node_user_def> program_node_user_list;
 
-	// TODO: change to ENUM
+	// FIXME: change to ENUM
 	short ui_state; // 1 working, 2 exiting started, 3-5 exiting in progress - mrrocpp processes closing, 6 - exit imeditily
 
 	TEACHING_STATE teachingstate; // dawne systemState do nauki
@@ -197,7 +197,7 @@ public:
 	 * @brief map of all robots used in the task
 	 */
 
-	common::robots_t getRobots() const;
+	const common::robots_t & getRobots() const;
 
 	common::robots_t robot_m;
 

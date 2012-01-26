@@ -89,7 +89,7 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	Ddefault[3] = 10000UL;
 	MotorAmax[3] = 10000UL;
 
-	// Set default motor velocities, accelerations and decelerations for axis 4 - (wrist rotation - "axis 2") - the MOOG motor.
+	// Set default motor velocities, accelerations and decelerations for axis 4 - (wrist rotation - "axis 2") - the Moog motor.
 	Vdefault[4] = 3000UL;
 	MotorVmax[4] = 3000UL;
 	Adefault[4] = 6000UL;
@@ -506,6 +506,7 @@ void effector::synchronise(void)
 		} while (!finished);
 
 		// Do homing for Moog motor.
+		axis2->setMaxAcceleration(5000);
 		axis2->doSoftwareHoming(PARAMS.moog_motor_homing_velocity, PARAMS.moog_motor_homing_offset, PARAMS.moog_motor_home_position);
 
 		// Do homing for another motor.
@@ -531,7 +532,9 @@ void effector::synchronise(void)
 			usleep(20000);
 		}
 #else
-		// Do homing for axi3 motor.
+		// Setup acceleration.
+		axis3->setMaxAcceleration(5000);
+		// Do homing for axis3 motor.
 		axis3->doSoftwareHoming(PARAMS.axis3_motor_homing_velocity, PARAMS.axis3_motor_homing_offset);
 #endif
 

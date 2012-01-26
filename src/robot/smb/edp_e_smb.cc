@@ -21,7 +21,10 @@
 
 #include "exceptions.h"
 
-using namespace std;
+// Provide some basic shortcuts.
+using std::cout;
+using std::endl;
+using std::string;
 
 namespace mrrocpp {
 namespace edp {
@@ -109,7 +112,7 @@ void effector::synchronise(void)
 
 			// Velocity and acceleration limits.
 			pkm_rotation_node->setMaxProfileVelocity(50);
-			pkm_rotation_node->setMaxAcceleration(1000);
+			pkm_rotation_node->setMaxAcceleration(100);
 
 			// NOTE: We assume, that scaling and offset are already set in the EPOS2.
 
@@ -125,7 +128,7 @@ void effector::synchronise(void)
 			// Loop until reaching zero offset.
 			printf("\n");
 			while (pkm_rotation_node->getAnalogInput1() != pkm_zero_position_voltage) {
-				printf("\rSMB calibration: Desired =%+10d[mv] | Actual  =%+10d[mv] | Offset  =%+10d[mv]", (int) pkm_zero_position_voltage, (int) pkm_rotation_node->getAnalogInput1(), (int) pkm_rotation_node->getAnalogVelocitySetpoint());
+				printf("\rSMB calibration: Desired =%+10d[mv] | Actual =%+10d[mv] | Offset =%+10d[mv]", (int) pkm_zero_position_voltage, (int) pkm_rotation_node->getAnalogInput1(), (int) pkm_rotation_node->getAnalogVelocitySetpoint());
 				fflush(stdout);
 
 				// Sleep for a constant period of time

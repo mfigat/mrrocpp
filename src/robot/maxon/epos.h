@@ -151,12 +151,6 @@ public:
 	 */
 	REGISTER_FATAL_ERROR(fe, "EPOS error");
 
-	/*!
-	 * \brief Exception thrown when the motor jam is detected.
-	 * \author Tomasz Kornuta
-	 */
-	REGISTER_FATAL_ERROR(fe_motor_jam_detected, "Motor jam detected");
-
 	/*! \brief create new EPOS object
 	 *
 	 * @param _device object to access the device
@@ -342,6 +336,9 @@ public:
 	//! write velocity for velocity mode
 	void setVelocityModeSettingValue(INTEGER32 val);
 
+	//! read maximal profile velocity
+	UNSIGNED32 getMaximalProfileVelocity();
+
 	//! write velocity normally attained at the end of the acceleration ramp during a profiled move
 	void setProfileVelocity(UNSIGNED32 vel);
 
@@ -377,9 +374,6 @@ public:
 
 	//! \brief read deceleration ramp during a Quickstop
 	UNSIGNED32 getQuickStopDeceleration();
-
-	//! \brief read maximal allowed speed
-	UNSIGNED32 getMaxProfileVelocity();
 
 	//! \brief read maximal allowed acceleration
 	UNSIGNED32 getMaxAcceleration();
@@ -767,7 +761,7 @@ public:
 	void setHomingMethod(homing_method_t method);
 
 	/*! \brief does a homing move. Give homing mode (see firmware 9.3) and start position */
-	int doHoming(homing_method_t method, INTEGER32 offset = 0);
+	void doHoming(homing_method_t method, INTEGER32 offset = 0);
 
 	/*! \brief software-only homing to mechanical stop */
 	void doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_position_ = 0);

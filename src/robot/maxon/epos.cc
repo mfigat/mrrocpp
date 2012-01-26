@@ -1075,6 +1075,11 @@ void epos::setVelocityModeSettingValue(INTEGER32 val)
 	WriteObjectValue(0x206B, 0x00, val);
 }
 
+UNSIGNED32 epos::getMaximalProfileVelocity()
+{
+	return ReadObjectValue<UNSIGNED32>(0x607F, 0x00);
+}
+
 void epos::setProfileVelocity(UNSIGNED32 val)
 {
 	if (ProfileVelocity != val) {
@@ -1158,11 +1163,6 @@ UNSIGNED32 epos::getProfileDeceleration()
 UNSIGNED32 epos::getQuickStopDeceleration()
 {
 	return ReadObjectValue <UNSIGNED32>(0x6085, 0x00);
-}
-
-UNSIGNED32 epos::getMaxProfileVelocity()
-{
-	return ReadObjectValue <UNSIGNED32>(0x607F, 0x00);
 }
 
 UNSIGNED32 epos::getMaxAcceleration()
@@ -1795,6 +1795,12 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 	INTEGER32 originalMinPositionLimit = getMinimalPositionLimit();
 	INTEGER32 originalMaxPositionLimit = getMaximalPositionLimit();
 
+	std::cout << "EPOS node " << getDeviceName() <<
+			": software homing / setup" <<
+			" maximal profile velocity = " << getMaximalProfileVelocity() <<
+			", max acceleration = " << getMaxAcceleration() <<
+			std::endl;
+
 	try {
 		// Disable both limits.
 		disablePositionLimits();
@@ -1819,9 +1825,10 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 			boost::thread::sleep(wakeup);
 
 			// Monitor velocity and state of the motor.
-			std::cout << "software homing -- initial phase:"
+			std::cout << "EPOS node " << getDeviceName() <<
+					": software homing / initial phase ->"
 					" velocity = " << getActualVelocityAveraged() <<
-					" state = " << stateDescription(getState()) <<
+					", state = " << stateDescription(getState()) <<
 					std::endl;
 		}
 
@@ -1842,10 +1849,11 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 
 			if(++monitor_counter < 20) {
 				// FIXME: Uncomment the following to debug the wakup/startup timer.
-				 std::cout << "software homing -- main phase:"
-						 " velocity = " << velocity <<
-						 " state = " << stateDescription(getState()) <<
-						 std::endl;
+				std::cout << "EPOS node " << getDeviceName() <<
+						": software homing / main phase ->"
+						" velocity = " << velocity <<
+						", state = " << stateDescription(getState()) <<
+						std::endl;
 			}
 		} while(abs(velocity) > 10);
 
@@ -1857,6 +1865,7 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 			// Homing: move to the index, then continue with an offset.
 			setHomePosition(home_position_);
 
+			// Monitor homing.
 			if (offset_ > 0) {
 				doHoming(maxon::epos::HM_INDEX_POSITIVE_SPEED, offset_);
 			} else if (offset_ < 0) {
@@ -1864,12 +1873,11 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 			} else {
 				doHoming(maxon::epos::HM_ACTUAL_POSITION, offset_);
 			}
-			// Monitor homing and set home position.
-			monitorHomingStatus();
 
 		} catch (boost::exception &e_) {
-			// Motor jam!
-			BOOST_THROW_EXCEPTION(fe_motor_jam_detected() << canId(nodeId));
+			// Motor jam?!
+			//e_ << reason("Motor jam detected");
+			throw;
 		}
 
 		// Revert to the original limits.
@@ -1890,7 +1898,7 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
  3: Homing Mode"
 
  */
-int epos::doHoming(homing_method_t method, INTEGER32 offset)
+void epos::doHoming(homing_method_t method, INTEGER32 offset)
 {
 	//move motor to a pre-defined position before the reference
 	//point. This will speed-up things if the coordinates are not too
@@ -1914,7 +1922,7 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 	// Display current homing parameters
 	std::cout << "Max. Following Error: " << getMaxFollowingError() << std::endl;
 	std::cout << "Home Offset: " << getHomeOffset() << std::endl;
-	std::cout << "Max. Profile Velocity: " << getMaxProfileVelocity() << std::endl;
+	std::cout << "Max. Profile Velocity: " << getMaximalProfileVelocity() << std::endl;
 	std::cout << "Quick Stop Deceleration: " << getQuickStopDeceleration() << std::endl;
 	std::cout << "Speed for Switch Search: " << getSpeedForSwitchSearch() << std::endl;
 	std::cout << "Speed for Zero Search: " << getSpeedForZeroSearch() << std::endl;
@@ -1939,24 +1947,9 @@ int epos::doHoming(homing_method_t method, INTEGER32 offset)
 	//read/print status
 	monitorHomingStatus();
 
-	WORD w = getStatusWord();
-	if ((w & E_BIT13) == E_BIT13) {
-		std::cout << "\a *** got a HomingError! ***\n";
-		return (-1);
-	}
-
-	if ((w & E_BIT12) == E_BIT12) {
-		// Just to be sure (this should be OK according to specification)
-		if ((w & E_BIT15) != E_BIT15) {
-			BOOST_THROW_EXCEPTION(fe() << reason("Not referenced after homing(!?)") << canId(nodeId));
-		}
-		std::cout << "homing finished!\n";
-		return (0);
-	} else {
-		//  can this be reached? position finished, no homing error but
-		//  homing NOT finished? I guess not..
-		return (-5);
-	}
+	// switch on
+	std::cout << "Switch-on" << std::endl;
+	setControlword(0x000f);
 }
 
 void epos::moveRelative(INTEGER32 steps)
@@ -2122,33 +2115,16 @@ bool epos::isHomingFinished()
 		BOOST_THROW_EXCEPTION(fe() << reason("HOMING ERROR!") << canId(nodeId));
 	}
 
-	// bit 10 says: target reached!, bit 12: homing attained
+	// bit 10 says: target reached, bit 12: homing attained.
 	return (((status & E_BIT10) == E_BIT10) && ((status & E_BIT12) == E_BIT12));
 }
 
 void epos::monitorHomingStatus()
 {
-	INTEGER32 posactual, velactual;
-	INTEGER16 curactual;
-	UNSIGNED16 status;
-#if 0
-	// Recovery retry counter
-	unsigned int retry = 0;
-
-	// Recovery status flag
-	bool recovered = false;
-
-	// It takes some time to recovery from FAULT state
-	while(retry++ < 5) {
-		if(getState() == FAULT) {
-
-
-
-#endif
-	printf("\nEPOS operating figures (note: update here is done AS FAST AS POSSIBLE!):\n");
+	// Monitoring counter.
 	int i = 0;
 
-	// Periodic timer
+	// Periodic timer.
 	boost::system_time wakeup = boost::get_system_time();
 
 	do {
@@ -2156,36 +2132,25 @@ void epos::monitorHomingStatus()
 		boost::thread::sleep(wakeup);
 
 		i++;
-		posactual = getActualPosition();
-		velactual = getActualVelocity();
-		curactual = getActualCurrent();
 
-		status = getStatusWord();
+		INTEGER32 posactual = getActualPosition();
+		INTEGER32 velactual = getActualVelocity();
+		INTEGER16 curactual = getActualCurrent();
 
-		printf("\r%d EPOS: pos=%+10d; v =%+4drpm I=%+5dmA status = %#06x ", i, posactual, velactual, curactual, status);
+		printf("\r%d EPOS: Position =%+10d | velocity=%+4drpm | I=%+5dmA", i, posactual, velactual, curactual);
 
 		fflush(stdout);
-
-		if ((status & E_BIT13) == E_BIT13) {
-			BOOST_THROW_EXCEPTION(fe() << reason("HOMING ERROR") << canId(nodeId));
-		}
 
 		// Increment the wakeup time
 		wakeup += boost::posix_time::milliseconds(5);
 
-	} while (((status & E_BIT10) != E_BIT10) && ((status & E_BIT12) != E_BIT12));
-	// bit 10 says: target reached!, bit 12: homing attained
+	} while (!isHomingFinished());
+
 	//printEPOSstatusword(status);
 
-	i++;
-	posactual = getActualPosition();
-	velactual = getActualVelocity();
-	curactual = getActualCurrent();
+	printf("\nhoming finished.\n");
 
-	status = getStatusWord();
-
-	printf("\r%d EPOS: pos=%+10d; v =  %+4drpm I=%+4dmA status = %#06x\n", i, posactual, velactual, curactual, status);
-	printf("homing finished! Position should now be '0'\n");
+	fflush(stdout);
 }
 
 /* waits for positoning to finish, argument is timeout in

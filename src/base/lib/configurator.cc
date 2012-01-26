@@ -36,6 +36,8 @@
 #include "base/lib/configurator.h"
 #include "base/lib/typedefs.h"
 
+#include "base/lib/exception.h"
+
 namespace mrrocpp {
 namespace lib {
 
@@ -66,7 +68,9 @@ configurator::configurator(const std::string & _node, const std::string & _dir, 
 	mrrocpp_network_path = "../";
 
 	if ((ch = messip::port_connect(CONFIGSRV_CHANNEL_NAME)) == NULL) {
+		BOOST_THROW_EXCEPTION(lib::exception::system_error());
 	}
+
 	assert(ch);
 }
 

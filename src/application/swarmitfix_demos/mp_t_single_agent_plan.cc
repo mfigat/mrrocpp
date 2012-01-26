@@ -36,6 +36,59 @@ void single_agent_demo::executeCommandItem(const Plan::PkmType::ItemType & pkmCm
 	// Make sure that there are only Xyz-Euler-Zyz coordinates.
 	assert(pkmCmd.pkmToWrist().present() == false);
 
+	// Only n*20 index allowed for base commands.
+	assert(abs(pkmCmd.ind() % 20) == 0);
+
+	// Check if command is allowed in a given state.
+	const int last_state = agent_last_state[pkmCmd.agent()-1];
+	const int new_state = abs(pkmCmd.ind() % 100);
+
+	switch(last_state) {
+		case 0:
+			switch(new_state) {
+				case 20:
+				case 80:
+					// SUPPORT->PRE/POST pose.
+					break;
+				default:
+					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "Only PRE/POST pose allowed from SUPPORT");
+					return;
+			}
+			break;
+		case 20:
+		case 80:
+			// Everything is allowed from PRE/POST pose.
+			break;
+		case 40:
+		case 50:
+		case 60:
+			switch(new_state) {
+				case 20:
+				case 80:
+					// NEUTRAL->PRE/POST pose.
+					break;
+				default:
+					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "Only PRE/POST pose allowed from NEUTRAL");
+					return;
+			}
+			break;
+		case -1:
+			switch(new_state) {
+				case 20:
+				case 80:
+					// UNKNOWN->PRE/POST pose.
+					break;
+				default:
+					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "Only PRE/POST pose allowed from UNKNOWN");
+					return;
+			}
+			break;
+		default:
+			// This should not happend.
+			assert(0);
+			break;
+	}
+
 	// PKM pose
 	lib::Xyz_Euler_Zyz_vector goal(
 			pkmCmd.Xyz_Euler_Zyz()->x(),
@@ -120,12 +173,30 @@ void single_agent_demo::executeCommandItem(const Plan::PkmType::ItemType & pkmCm
 				break;
 		}
 	}
+
+	// Update state of the agent.
+	agent_last_state[pkmCmd.agent()-1] = abs(pkmCmd.ind() % 100);
 }
 
 void single_agent_demo::executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, int dir)
 {
 	// TODO: Only single-item actions are supported at this time.
 	assert(smbCmd.actions().item().size() == 1);
+
+	// Only x50 index allowed for base commands.
+	assert(abs(smbCmd.ind() % 100) == 50);
+
+	// Check if rotation is allowed in the current state.
+	switch(agent_last_state[smbCmd.agent()-1] % 100) {
+		case 40:
+		case 50:
+		case 60:
+			// PKM is in neutral pose.
+			break;
+		default:
+			sr_ecp_msg->message(lib::NON_FATAL_ERROR, "Rotation prohibited in non-neutral pose");
+			return;
+	}
 
 	// Check if robot name match with item.
 	lib::robot_name_t smb_robot_name;
@@ -143,6 +214,9 @@ void single_agent_demo::executeCommandItem(const Plan::MbaseType::ItemType & smb
 		// Execute command.
 		smb_rotate_external(smb_robot_name, 0, smbCmd.pkmTheta());
 	}
+
+	// Update state of the agent.
+	agent_last_state[smbCmd.agent()-1] = abs(smbCmd.ind() % 100);
 }
 
 single_agent_demo::single_agent_demo(lib::configurator &config_) :
@@ -151,6 +225,9 @@ single_agent_demo::single_agent_demo(lib::configurator &config_) :
 	// Read plan from file.
 	p = readPlanFromFile(config.value<std::string>("planpath"));
 
+	// Initialize state of the agents.
+	agent_last_state[0] = -1;
+	agent_last_state[1] = -1;
 }
 
 void single_agent_demo::create_robots()

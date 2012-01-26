@@ -73,6 +73,9 @@ protected:
 
 		return it;
 	}
+
+	//! Indices of the last command executed by the agents.
+	int agent_last_state[2];
 };
 
 /** @} */// end of swarmitfix

@@ -42,6 +42,7 @@ private:
 		//! PKM+HEAD plan item.
 		struct : common {
 			float x,y,z,alpha,beta,gamma,head;
+			int ind;
 		} pkm_item;
 
 		//! MBASE+BENCH plan item.
@@ -51,13 +52,19 @@ private:
 		} mbase_item;
 	} clipboard;
 
+	//! Index of the last executed action (to enable fine-tuning only after EXEC).
+	int last_executed_ind;
+
 	Ui::wgt_planClass* ui;
 
-	//! Deactivate widget into idle mode
+	//! Deactivate widget into idle mode.
 	void reply();
 
-	//! Reload inputs with original request
+	//! Reload inputs with original request.
 	void reload();
+
+	//! Change state of the navigation buttons.
+	void enableNavigation(bool enabled);
 
 	//! Check if value is within widget limits.
 	template<class WIDGET_T, class VALUE_T>

@@ -48,6 +48,7 @@ wgt_plan::wgt_plan(mrrocpp::ui::common::Interface& _interface, QWidget *parent) 
 
 	// Initially finetuning is disabled.
 	finetuning_active = false;
+	last_executed_ind = -1;
 
 	// Initialize status of the clipboard.
 	clipboard.mbase_item.present = false;
@@ -120,6 +121,9 @@ void wgt_plan::reload()
 				} else {
 					ui->comment_input->clear();
 				}
+
+				// Allow fine-tuning.
+				finetuning_active = (last_executed_ind == item.ind());
 			}
 
 			// Disable/enable input containers
@@ -181,6 +185,9 @@ void wgt_plan::reload()
 				} else {
 					ui->comment_input->clear();
 				}
+
+				// Allow fine-tuning.
+				finetuning_active = (last_executed_ind == item.ind());
 			}
 
 			// Disable/enable input containers
@@ -194,8 +201,9 @@ void wgt_plan::reload()
 			break;
 	}
 
-	// Allow fine-tuning.
-	finetuning_active = true;
+	// Enable navigation.
+	enableNavigation(true);
+
 }
 
 void wgt_plan::my_open(bool set_on_top)
@@ -307,6 +315,9 @@ void wgt_plan::on_pushButton_exec_clicked()
 	reply.plan_item_string = ostr.str();
 
 	this->reply();
+
+	// Record the last executed item.
+	last_executed_ind = ui->ind_input->value();
 }
 
 void wgt_plan::on_pushButton_save_clicked()
@@ -353,6 +364,7 @@ void wgt_plan::on_pushbutton_copy_clicked()
 		clipboard.pkm_item.beta = ui->beta_input->value();
 		clipboard.pkm_item.gamma = ui->gamma_input->value();
 		clipboard.pkm_item.head = ui->head_input->value();
+		clipboard.pkm_item.ind = abs(ui->ind_input->value() % 100);
 
 		// Common part.
 		clipboard.pkm_item.comment = ui->comment_input->toPlainText().toStdString();
@@ -384,7 +396,11 @@ void wgt_plan::on_pushbutton_paste_clicked()
 	}
 
 	if(ui->pkm_frame->isEnabled() && clipboard.pkm_item.present) {
-		if(clipboard.pkm_item.agent == ui->agent_input->value()) {
+		if(clipboard.pkm_item.agent != ui->agent_input->value()) {
+			interface.ui_msg->message(lib::NON_FATAL_ERROR, "Pasting command from different agent not allowed");
+		} else if(clipboard.pkm_item.ind != abs(ui->ind_input->value() % 100)) {
+			interface.ui_msg->message(lib::NON_FATAL_ERROR, "Pasting command from different index not allowed");
+		} else {
 			ui->x_input->setValue(clipboard.pkm_item.x);
 			ui->y_input->setValue(clipboard.pkm_item.y);
 			ui->z_input->setValue(clipboard.pkm_item.z);
@@ -394,8 +410,6 @@ void wgt_plan::on_pushbutton_paste_clicked()
 			ui->head_input->setValue(clipboard.pkm_item.head);
 
 			ui->comment_input->setPlainText(clipboard.mbase_item.comment.c_str());
-		} else {
-			interface.ui_msg->message(lib::NON_FATAL_ERROR, "Pasting clipboard from different agent not allowed");
 		}
 	}
 
@@ -505,6 +519,9 @@ void wgt_plan::finetune_head()
 			}
 		}
 	}
+
+	// Disable navigation until fine-tuned pose is executed or discarded.
+	enableNavigation(false);
 }
 
 void wgt_plan::finetune_pkm()
@@ -564,6 +581,9 @@ void wgt_plan::finetune_pkm()
 			}
 		}
 	}
+
+	// Disable navigation until fine-tuned pose is executed or discarded.
+	enableNavigation(false);
 }
 
 void wgt_plan::finetune_mbase()
@@ -616,6 +636,17 @@ void wgt_plan::finetune_mbase()
 			}
 		}
 	}
+
+	// Disable navigation until fine-tuned pose is executed or discarded.
+	enableNavigation(false);
+}
+
+void wgt_plan::enableNavigation(bool enabled)
+{
+	// Change state of the navigation buttons.
+	ui->pushButton_prev->setEnabled(enabled);
+	ui->pushButton_next->setEnabled(enabled);
+	ui->pushButton_save->setEnabled(enabled);
 }
 
 void wgt_plan::reply()
@@ -629,6 +660,9 @@ void wgt_plan::reply()
 
 	this->setEnabled(false);
 
-	// Disable finetuning until new plan item will be loaded.
+	// Disable fine-tuning until new plan item will be loaded.
 	finetuning_active = false;
+
+	// Enable navigation.
+	enableNavigation(true);
 }

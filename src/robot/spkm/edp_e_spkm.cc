@@ -993,6 +993,9 @@ void effector::execute_motion()
 						axes[i]->setOperationMode(maxon::epos::OMD_PROFILE_POSITION_MODE);
 						axes[i]->setPositionProfileType(0); // Trapezoidal velocity profile
 
+						// Slightly round-up to avoid problems from numerical problems.
+						Vnew[i] = ceil(Vnew[i]);
+
 						// Apply Maxon-specific value limits (zero is not allowed).
 						if (Vnew[i] < 1) {
 							Vnew[i] = 1;
@@ -1448,7 +1451,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 		if (instruction.instruction_type != lib::SET) {
 			switch (instruction.spkm.get_pose_specification)
 			{
-				case lib::spkm::MOTOR: {
+				case lib::spkm::MOTOR:
 					//DEBUG_COMMAND("MOTOR");
 					for (size_t i = 0; i < axes.size(); ++i) {
 						if (robot_test_mode) {
@@ -1462,9 +1465,8 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 							reply.spkm.epos_controller[i].motion_in_progress = !axes[i]->isTargetReached();
 						}
 					}
-				}
 					break;
-				case lib::spkm::JOINT: {
+				case lib::spkm::JOINT:
 					//DEBUG_COMMAND("JOINT");
 					// Read actual values from the hardware.
 					if (!robot_test_mode) {
@@ -1482,7 +1484,7 @@ void effector::get_arm_position(bool read_hardware, lib::c_buffer &instruction_)
 					for (size_t i = 0; i < number_of_servos; ++i) {
 						reply.spkm.epos_controller[i].position = current_joints[i];
 					}
-				}
+
 					break;
 				case lib::spkm::WRIST_XYZ_EULER_ZYZ: {
 					//DEBUG_COMMAND("WRIST_XYZ_EULER_ZYZ");

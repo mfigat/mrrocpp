@@ -228,8 +228,12 @@ void robot::get_reply()
 	}
 
 	if (epos_joint_reply_data_request_port.is_new_request()) {
-		// generator reply generation
-		sr_ecp_msg.message("ECP get_reply epos_joint_reply_data_request_port");
+		// Build "motion in progress" status message.
+		std::stringstream msg_stream;
+
+		unsigned int still_in_progress = 0, still_moving_axis;
+
+		msg_stream << "(joint): motion in progress -> ";
 
 		for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
 			epos_joint_reply_data_request_port.data.epos_controller[i].position =
@@ -238,14 +242,32 @@ void robot::get_reply()
 					reply_package.spkm.epos_controller[i].current;
 			epos_joint_reply_data_request_port.data.epos_controller[i].motion_in_progress =
 					reply_package.spkm.epos_controller[i].motion_in_progress;
+
+			if(reply_package.spkm.epos_controller[i].motion_in_progress) {
+				msg_stream << i;
+				++still_in_progress;
+				still_moving_axis = i;
+			} else {
+				msg_stream << "_";
+			}
 		}
+
+		if(still_in_progress == 1) {
+			msg_stream << " (" << reply_package.spkm.epos_controller[still_moving_axis].position << ")";
+		}
+
+		sr_ecp_msg.message(msg_stream.str());
+
 		epos_joint_reply_data_request_port.data.contact = reply_package.spkm.contact;
 
 		epos_joint_reply_data_request_port.set();
 	}
 
 	if (epos_external_reply_data_request_port.is_new_request()) {
-		sr_ecp_msg.message("ECP get_reply epos_external_reply_data_request_port");
+		// Build "motion in progress" status message.
+		std::stringstream msg_stream;
+
+		msg_stream << "(external): motion in progress -> ";
 
 		// generator reply generation
 		for (int i = 0; i < lib::spkm::NUM_OF_SERVOS; i++) {
@@ -255,7 +277,15 @@ void robot::get_reply()
 					reply_package.spkm.epos_controller[i].current;
 			epos_external_reply_data_request_port.data.epos_controller[i].motion_in_progress =
 					reply_package.spkm.epos_controller[i].motion_in_progress;
+
+			if(reply_package.spkm.epos_controller[i].motion_in_progress) {
+				msg_stream << i;
+			} else {
+				msg_stream << "_";
+			}
 		}
+
+		sr_ecp_msg.message(msg_stream.str());
 
 		epos_external_reply_data_request_port.data.contact = reply_package.spkm.contact;
 

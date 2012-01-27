@@ -26,18 +26,7 @@ namespace generator {
 class joint_epos_command : public common::generator::_generator <ecp::spkm::robot>
 {
 private:
-
 	lib::epos::epos_simple_command mp_ecp_epos_simple_command;
-
-	/**
-	 * @brief epos external motion command data port
-	 */
-	lib::single_thread_port <lib::epos::epos_simple_command> *epos_joint_command_data_port;
-
-	/**
-	 * @brief epos motion status with external reply data request port
-	 */
-	lib::single_thread_request_port <lib::epos::epos_reply> *epos_joint_reply_data_request_port;
 
 public:
 
@@ -63,18 +52,7 @@ public:
 class external_epos_command : public common::generator::_generator <ecp::spkm::robot>
 {
 private:
-
 	lib::spkm::spkm_epos_simple_command mp_ecp_epos_simple_command;
-
-	/**
-	 * @brief epos external motion command data port
-	 */
-	lib::single_thread_port <lib::spkm::spkm_epos_simple_command> *epos_external_command_data_port;
-
-	/**
-	 * @brief epos motion status with external reply data request port
-	 */
-	lib::single_thread_request_port <lib::spkm::spkm_ext_epos_reply, lib::spkm::POSE_SPECIFICATION> *epos_external_reply_data_request_port;
 
 public:
 

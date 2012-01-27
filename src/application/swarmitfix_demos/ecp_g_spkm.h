@@ -54,6 +54,11 @@ class external_epos_command : public common::generator::_generator <ecp::spkm::r
 private:
 	lib::spkm::spkm_epos_simple_command mp_ecp_epos_simple_command;
 
+	boost::system_time wakeup;
+
+	//! Effector query interval
+	const boost::posix_time::time_duration query_interval;
+
 public:
 
 	/**

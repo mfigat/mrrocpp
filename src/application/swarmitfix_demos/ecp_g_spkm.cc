@@ -2,6 +2,9 @@
  * Author: yoyek
  */
 
+#include <boost/thread/thread.hpp>
+#include <boost/date_time/time_duration.hpp>
+
 #include "base/lib/sr/sr_ecp.h"
 #include "base/ecp/ecp_task.h"
 #include "base/ecp/ecp_robot.h"
@@ -80,7 +83,8 @@ void joint_epos_command::get_mp_ecp_command()
 ////////////////////////////////////////////////////////
 
 external_epos_command::external_epos_command(task_t & _ecp_task) :
-		generator_t(_ecp_task)
+		generator_t(_ecp_task),
+		query_interval(boost::posix_time::milliseconds(25))
 {
 }
 
@@ -98,6 +102,8 @@ bool external_epos_command::first_step()
 //	the_robot->epos_external_reply_data_request_port.set_request();
 
 	the_robot->epos_joint_reply_data_request_port.set_request();
+
+	wakeup = boost::get_system_time();
 
 	return true;
 }
@@ -122,8 +128,9 @@ bool external_epos_command::next_step()
 
 		the_robot->epos_joint_reply_data_request_port.set_request();
 
-		// Wait 20ms to check EPOS state.
-		delay(20);
+		// Delay until next EPOS query.
+		wakeup += query_interval;
+		boost::thread::sleep(wakeup);
 
 		return true;
 	}

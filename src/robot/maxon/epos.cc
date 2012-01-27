@@ -1827,7 +1827,7 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 			// Monitor velocity and state of the motor.
 			std::cout << "EPOS node " << getDeviceName() <<
 					": software homing / initial phase ->"
-					" velocity = " << getActualVelocityAveraged() <<
+					" velocity = " << (int) getActualVelocityAveraged() <<
 					", state = " << stateDescription(getState()) <<
 					std::endl;
 		}
@@ -1851,7 +1851,7 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 				// FIXME: Uncomment the following to debug the wakup/startup timer.
 				std::cout << "EPOS node " << getDeviceName() <<
 						": software homing / main phase ->"
-						" velocity = " << velocity <<
+						" velocity = " << (int) velocity <<
 						", state = " << stateDescription(getState()) <<
 						std::endl;
 			}

@@ -75,7 +75,7 @@ void robot::create_kinematic_models_for_given_robot(void)
 void robot::create_command()
 {
 
-	sr_ecp_msg.message("create_command");
+	//sr_ecp_msg.message("create_command");
 
 	if (epos_motor_command_data_port.get() == mrrocpp::lib::single_thread_port_interface::NewData) {
 		ecp_command.set_type = ARM_DEFINITION;

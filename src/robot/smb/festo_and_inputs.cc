@@ -230,7 +230,7 @@ void festo_and_inputs::set_clean(int leg_number, bool value)
 
 void festo_and_inputs::determine_legs_state()
 {
-	if (!(robot_test_mode)) {
+	if (!robot_test_mode) {
 		read_state();
 		int number_of_legs_in = 0;
 
@@ -847,7 +847,9 @@ void festo_and_inputs::create_reply()
 	determine_legs_state();
 
 	if (!robot_test_mode) {
-		read_state();
+		// State is already known because of call to determine_legs_state().
+		//read_state();
+
 		for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 			master.reply.smb.multi_leg_reply.leg[i].is_out = is_lower_halotron_active(i + 1);
 			master.reply.smb.multi_leg_reply.leg[i].is_in = is_upper_halotron_active(i + 1);

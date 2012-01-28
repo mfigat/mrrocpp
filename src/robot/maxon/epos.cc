@@ -1817,7 +1817,7 @@ void epos::doSoftwareHoming(int32_t velocity_, int32_t offset_, int32_t home_pos
 		boost::system_time wakeup = boost::get_system_time();
 
 		// Display velocity values during acceleration.
-		for(int i = 0; i < 10; ++i) {
+		for(int i = 0; i < 15; ++i) {
 			// Increment the next wakeup time.
 			wakeup += boost::posix_time::milliseconds(5);
 

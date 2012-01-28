@@ -126,6 +126,12 @@ effector::~effector()
 {
 	DEBUG_METHOD;
 
+	BOOST_FOREACH(boost::shared_ptr<maxon::epos> node, axes)
+	{
+		// Enable+Halt
+		if(node) node->setControlword(0x010f);
+	}
+
 	// Apply brake during shutdown.
 	if (axis2.get()) disable_moog_motor();
 }
@@ -478,6 +484,20 @@ void effector::synchronise(void)
 		// Check state of the robot.
 		if (controller_state_edp_buf.robot_in_fault_state)
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::exception::fe_robot_in_fault_state());
+
+		std::cout << "Axis A Current Threshold for Homing Mode = "
+				<< (int) axisA->getCurrentThresholdForHomingMode()
+				<< "[mA]" << std::endl;
+
+		std::cout << "Axis B Current Threshold for Homing Mode = "
+				<< (int) axisB->getCurrentThresholdForHomingMode()
+				<< "[mA]" << std::endl;
+
+		std::cout << "Axis C Current Threshold for Homing Mode = "
+				<< (int) axisC->getCurrentThresholdForHomingMode()
+				<< "[mA]" << std::endl;
+
+		axisB->setCurrentThresholdForHomingMode(3000);
 
 		// Switch linear axes to homing mode.
 		axisA->setOperationMode(maxon::epos::OMD_HOMING_MODE);

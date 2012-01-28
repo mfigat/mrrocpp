@@ -28,7 +28,7 @@ effector::effector(common::shell &_shell) :
 
 	// Set synchronization values, different for both SMBs.
 	pkm_zero_position_voltage = 2500;
-	pkm_zero_position_offset = 9850;
+	pkm_zero_position_offset = 9850-382;
 }
 
 

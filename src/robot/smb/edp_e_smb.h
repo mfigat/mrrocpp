@@ -131,6 +131,9 @@ public:
 	 */
 	effector(common::shell &_shell, lib::robot_name_t l_robot_name);
 
+	//! Destructor.
+	~effector();
+
 	/*!
 	 * \brief method to create threads other then EDP master thread.
 	 *

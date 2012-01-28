@@ -37,17 +37,18 @@ void single_agent_demo::executeCommandItem(const Plan::PkmType::ItemType & pkmCm
 	assert(pkmCmd.pkmToWrist().present() == false);
 
 	// Only n*20 index allowed for base commands.
-	assert(abs(pkmCmd.ind() % 20) == 0);
+	assert((pkmCmd.ind() + 100) % 20 == 0);
 
 	// Check if command is allowed in a given state.
 	const int last_state = agent_last_state[pkmCmd.agent()-1];
-	const int new_state = abs(pkmCmd.ind() % 100);
+	const int new_state = (pkmCmd.ind() + 100) % 100;
 
 	switch(last_state) {
 		case 0:
 			switch(new_state) {
 				case 20:
 				case 80:
+				case 0:
 					// SUPPORT->PRE/POST pose.
 					break;
 				default:
@@ -64,8 +65,10 @@ void single_agent_demo::executeCommandItem(const Plan::PkmType::ItemType & pkmCm
 		case 60:
 			switch(new_state) {
 				case 20:
+				case 40:
+				case 60:
 				case 80:
-					// NEUTRAL->PRE/POST pose.
+					// NEUTRAL->PRE/POST/NEUTRAL pose.
 					break;
 				default:
 					sr_ecp_msg->message(lib::NON_FATAL_ERROR, "Only PRE/POST pose allowed from NEUTRAL");
@@ -143,8 +146,9 @@ void single_agent_demo::executeCommandItem(const Plan::PkmType::ItemType & pkmCm
 		shead_solidify(shead_robot_name, false);
 		shead_vacuum(shead_robot_name, false);
 
-		switch(pkmCmd.ind() % 100) {
+		switch((pkmCmd.ind() + 100) % 100) {
 			case 0:
+			case 40:
 			case 80:
 				move_shead_joints(shead_robot_name, head_pose);
 				break;
@@ -158,14 +162,14 @@ void single_agent_demo::executeCommandItem(const Plan::PkmType::ItemType & pkmCm
 
 	// POST-head command;
 	if(is_robot_activated(shead_robot_name)) {
-		switch(pkmCmd.ind() % 100) {
+		switch((pkmCmd.ind() + 100) % 100) {
 			case 0:
 				// Apply vacuum...
-				shead_vacuum(shead_robot_name, true); // FIXME: turn on the vacuum.
+				shead_vacuum(shead_robot_name, false); // FIXME: turn on the vacuum.
 				// ...wait a while...
 				boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 				// ...apply solidification...
-				shead_solidify(shead_robot_name, true); // FIXME: turn on the solidification.
+				shead_solidify(shead_robot_name, false); // FIXME: turn on the solidification.
 				// ...and brake.
 				spkm_brake(spkm_robot_name);
 				break;
@@ -175,7 +179,7 @@ void single_agent_demo::executeCommandItem(const Plan::PkmType::ItemType & pkmCm
 	}
 
 	// Update state of the agent.
-	agent_last_state[pkmCmd.agent()-1] = abs(pkmCmd.ind() % 100);
+	agent_last_state[pkmCmd.agent()-1] = (pkmCmd.ind() + 100) % 100;
 }
 
 void single_agent_demo::executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, int dir)
@@ -184,7 +188,7 @@ void single_agent_demo::executeCommandItem(const Plan::MbaseType::ItemType & smb
 	assert(smbCmd.actions().item().size() == 1);
 
 	// Only x50 index allowed for base commands.
-	assert(abs(smbCmd.ind() % 100) == 50);
+	assert((smbCmd.ind() + 100) % 100 == 50);
 
 	// Check if rotation is allowed in the current state.
 	switch(agent_last_state[smbCmd.agent()-1] % 100) {
@@ -216,7 +220,7 @@ void single_agent_demo::executeCommandItem(const Plan::MbaseType::ItemType & smb
 	}
 
 	// Update state of the agent.
-	agent_last_state[smbCmd.agent()-1] = abs(smbCmd.ind() % 100);
+	agent_last_state[smbCmd.agent()-1] = (smbCmd.ind() + 100) % 100;
 }
 
 single_agent_demo::single_agent_demo(lib::configurator &config_) :
@@ -333,7 +337,7 @@ lib::UI_TO_ECP_REPLY single_agent_demo::step_mode(Pkm::ItemType & item)
 		BOOST_THROW_EXCEPTION(lib::exception::system_error());
 	}
 
-	if((ui_to_ecp_rep.reply == lib::PLAN_EXEC) || (ui_to_ecp_rep.reply == lib::PLAN_SAVE)) {
+	if(ui_to_ecp_rep.reply == lib::PLAN_EXEC) {
 		std::istringstream istr(ui_to_ecp_rep.plan_item_string);
 		boost::archive::text_iarchive ia(istr);
 		xml_schema::istream<boost::archive::text_iarchive> is (ia);
@@ -357,7 +361,7 @@ void single_agent_demo::main_task_algorithm(void)
 	const bool execute_plan_in_step_mode = true;
 
 	// Time index counter
-	int indMin = 0, indMax = 0;
+	int indMin = 99999999, indMax = 0;
 
 	// Setup index counter at the beginning of the plan
 	BOOST_FOREACH(const Plan::PkmType::ItemType & it, p->pkm().item()) {
@@ -368,6 +372,9 @@ void single_agent_demo::main_task_algorithm(void)
 		if(indMin > it.ind()) indMin = it.ind();
 		if(indMax < it.ind()) indMax = it.ind();
 	}
+
+	// Make sure that modulo 100 arithmetics operate on positives.
+	assert(indMin > -99);
 
 	for (int ind = indMin, dir = 0; true; ind += dir) {
 
@@ -391,38 +398,34 @@ void single_agent_demo::main_task_algorithm(void)
 		// Execute matching command item
 		if(pkm_it != p->pkm().item().end()) {
 
-			// Skip correcting-only state.
-			if (pkm_it->ind() % 100 != 60) {
-
-				if(execute_plan_in_step_mode) {
-					switch(step_mode(*pkm_it)) {
-						case lib::PLAN_PREV:
-							dir = -1;
-							break;
-						case lib::PLAN_NEXT:
-							dir = +1;
-							break;
-						case lib::PLAN_EXEC:
-							currentActionState = (State *) &(*pkm_it);
-							start_timestamp = boost::get_system_time();
-							executeCommandItem(*pkm_it);
-							record_timestamp = true;
-							dir = 0;
-							break;
-						case lib::PLAN_SAVE:
-							save_plan(*p);
-							dir = 0;
-							break;
-						default:
-							break;
-					}
-				} else {
-					currentActionState = (State *) &(*pkm_it);
-					start_timestamp = boost::get_system_time();
-					executeCommandItem(*pkm_it);
-					record_timestamp = true;
-					dir = 1;
+			if(execute_plan_in_step_mode) {
+				switch(step_mode(*pkm_it)) {
+					case lib::PLAN_PREV:
+						dir = -1;
+						break;
+					case lib::PLAN_NEXT:
+						dir = +1;
+						break;
+					case lib::PLAN_EXEC:
+						currentActionState = (State *) &(*pkm_it);
+						start_timestamp = boost::get_system_time();
+						executeCommandItem(*pkm_it);
+						record_timestamp = true;
+						dir = 0;
+						break;
+					case lib::PLAN_SAVE:
+						save_plan(*p);
+						dir = 0;
+						break;
+					default:
+						break;
 				}
+			} else {
+				currentActionState = (State *) &(*pkm_it);
+				start_timestamp = boost::get_system_time();
+				executeCommandItem(*pkm_it);
+				record_timestamp = true;
+				dir = 1;
 			}
 
 		} else if(smb_it != p->mbase().item().end()) {

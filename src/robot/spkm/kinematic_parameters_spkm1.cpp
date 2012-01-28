@@ -26,7 +26,7 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1() :
 	synchro_positions[5] = 0.0;
 
 	// Moog motor homing offset (in [qc]).
-	moog_motor_homing_offset = 83000;
+	moog_motor_homing_offset = 83000-18000;
 
 	// Moog motor homing velocity.
 	moog_motor_homing_velocity = -100;
@@ -35,7 +35,7 @@ kinematic_parameters_spkm1::kinematic_parameters_spkm1() :
 	moog_motor_home_position = -300000;
 
 	// Homing offset of axis 3 motor [qc].
-	axis3_motor_homing_offset = 269300;
+	axis3_motor_homing_offset = 269300-5000;
 
 	// Homing velocity of the axis 3 motor [rpm].
 	axis3_motor_homing_velocity = -100;

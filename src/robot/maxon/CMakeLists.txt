@@ -15,6 +15,9 @@ target_link_libraries (ipmtest epos rt)
 add_executable(cantest cantest.cc)
 target_link_libraries (cantest epos)
 
+add_executable(canopen_reset_node canopen_reset_node.cc)
+target_link_libraries (canopen_reset_node epos)
+
 # SMB testing. 
 add_executable(smb_synchro_test smb_synchro_test.cc)
 target_link_libraries (smb_synchro_test epos)

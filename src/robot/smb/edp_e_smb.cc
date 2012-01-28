@@ -84,6 +84,15 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 
 }
 
+effector::~effector()
+{
+	// Enable+Halt
+	if(legs_rotation_node) legs_rotation_node->setControlword(0x010f);
+
+	// Enable+Halt
+	if(pkm_rotation_node) pkm_rotation_node->setControlword(0x010f);
+}
+
 void effector::master_order(common::MT_ORDER nm_task, int nm_tryb)
 {
 	DEBUG_METHOD;

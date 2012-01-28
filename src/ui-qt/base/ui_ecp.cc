@@ -45,16 +45,18 @@ namespace ui {
 namespace common {
 
 ecp_buffer::ecp_buffer(Interface& _interface) :
-		interface(_interface), communication_state(UI_ECP_AFTER_REPLY),
-		ecp_to_ui_msg(_ecp_to_ui_msg)
+		interface(_interface), communication_state(UI_ECP_AFTER_REPLY), ecp_to_ui_msg(_ecp_to_ui_msg)
 {
 	thread_id = boost::thread(boost::bind(&ecp_buffer::operator(), this));
 }
 
 ecp_buffer::~ecp_buffer()
 {
-	 thread_id.interrupt();
-	 thread_id.join(); // join it
+//	// FIXME: pthread cancel is not portable.
+//	pthread_cancel(thread_id.native_handle());
+//
+//	thread_id.interrupt();
+//	thread_id.join(); // join it
 }
 
 void ecp_buffer::operator()()

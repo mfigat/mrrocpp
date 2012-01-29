@@ -181,9 +181,6 @@ void plan_executor::executeCommandItem(const Plan::MbaseType::ItemType & smbCmd,
 	// TODO: Only single-item actions are supported at this time.
 	assert(smbCmd.actions().item().size() == 1);
 
-	// Only x50 index allowed for base commands.
-	assert((smbCmd.ind() + 100) % 100 == 50);
-
 	// Check if rotation is allowed in the current state.
 	switch(pkm_last_state.at(smbCmd.agent())) {
 		case Type::NEUTRAL:

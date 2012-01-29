@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>696</width>
-    <height>565</height>
+    <height>695</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -102,6 +102,9 @@
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_2">
+           <property name="toolTip">
+            <string>Time to begin</string>
+           </property>
            <property name="text">
             <string>TBeg</string>
            </property>
@@ -128,6 +131,9 @@
          </item>
          <item row="4" column="0">
           <widget class="QLabel" name="label_3">
+           <property name="toolTip">
+            <string>Time to end</string>
+           </property>
            <property name="text">
             <string>TEnd</string>
            </property>
@@ -156,7 +162,11 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="QPlainTextEdit" name="comment_input"/>
+          <widget class="QPlainTextEdit" name="comment_input">
+           <property name="toolTip">
+            <string>Comment</string>
+           </property>
+          </widget>
          </item>
          <item row="5" column="0">
           <widget class="QPushButton" name="pushbutton_clearComment">
@@ -164,6 +174,9 @@
             <string>Clear comment</string>
            </property>
           </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QComboBox" name="poseType_input"/>
          </item>
         </layout>
        </widget>
@@ -184,19 +197,53 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
+          <widget class="QPushButton" name="pushButton_play">
+           <property name="toolTip">
+            <string>Start automatic execution</string>
+           </property>
+           <property name="text">
+            <string>PLAY</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="QPushButton" name="pushButton_prev"/>
+            <widget class="QPushButton" name="pushButton_prev">
+             <property name="toolTip">
+              <string>Skip to previous state</string>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QPushButton" name="pushButton_reload">
+             <property name="toolTip">
+              <string>Reload current pose to original</string>
+             </property>
              <property name="text">
               <string>RELOAD</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_next"/>
+            <widget class="QPushButton" name="pushButton_next">
+             <property name="toolTip">
+              <string>Skip to next state</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -204,6 +251,9 @@
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
             <widget class="QPushButton" name="pushbutton_copy">
+             <property name="toolTip">
+              <string>Copy current pose to clipboard</string>
+             </property>
              <property name="text">
               <string>Copy</string>
              </property>
@@ -214,6 +264,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="pushbutton_paste">
+             <property name="toolTip">
+              <string>Paste from clipboard</string>
+             </property>
              <property name="text">
               <string>Paste</string>
              </property>
@@ -226,6 +279,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="pushButton_exec">
+           <property name="toolTip">
+            <string>Execute current pose</string>
+           </property>
            <property name="text">
             <string>EXEC</string>
            </property>
@@ -233,6 +289,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="pushButton_save">
+           <property name="toolTip">
+            <string>Save to file</string>
+           </property>
            <property name="text">
             <string>SAVE</string>
            </property>
@@ -368,7 +427,7 @@
           <item row="5" column="0">
            <widget class="QLabel" name="label_15">
             <property name="text">
-             <string>1</string>
+             <string>leg 1</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -378,7 +437,7 @@
           <item row="6" column="0">
            <widget class="QLabel" name="label_16">
             <property name="text">
-             <string>2</string>
+             <string>leg 2</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -388,7 +447,7 @@
           <item row="7" column="0">
            <widget class="QLabel" name="label_17">
             <property name="text">
-             <string>3</string>
+             <string>leg 3</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -401,6 +460,9 @@
          <layout class="QFormLayout" name="formLayout_3">
           <item row="0" column="0">
            <widget class="QLabel" name="label_18">
+            <property name="toolTip">
+             <string>Leg around which to rotate</string>
+            </property>
             <property name="text">
              <string>pin</string>
             </property>
@@ -418,6 +480,9 @@
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_19">
+            <property name="toolTip">
+             <string>Rotation around leg</string>
+            </property>
             <property name="text">
              <string>dThetaInd</string>
             </property>
@@ -425,6 +490,9 @@
           </item>
           <item row="1" column="1">
            <widget class="QSpinBox" name="dThetaInd_input">
+            <property name="toolTip">
+             <string>Rotation around leg</string>
+            </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
@@ -463,6 +531,9 @@
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_20">
+            <property name="toolTip">
+             <string>PKM-vs-BASE pose</string>
+            </property>
             <property name="text">
              <string>pkmTheta</string>
             </property>
@@ -615,6 +686,9 @@
         </item>
         <item row="4" column="0">
          <widget class="QLabel" name="label_9">
+          <property name="toolTip">
+           <string>The Moog motor</string>
+          </property>
           <property name="text">
            <string>β</string>
           </property>
@@ -673,12 +747,15 @@
            <double>4.000000000000000</double>
           </property>
           <property name="singleStep">
-           <double>0.001000000000000</double>
+           <double>0.050000000000000</double>
           </property>
          </widget>
         </item>
         <item row="6" column="0">
          <widget class="QLabel" name="label_11">
+          <property name="toolTip">
+           <string>Head pose</string>
+          </property>
           <property name="text">
            <string>head</string>
           </property>

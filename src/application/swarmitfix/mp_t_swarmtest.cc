@@ -196,10 +196,11 @@ void swarmitfix::handleNotification(const lib::robot_name_t & robot_name, IO_t::
 
 void swarmitfix::save_plan(const Plan & p)
 {
-	std::cout << "Save to file." << std::endl;
-	std::string savepath = config.value<std::string>(planner::planpath);
-	std::ofstream ofs ("foo.xml"/*savepath.c_str()*/);
-	plan(ofs, p);
+	if(config.exists(plan_iface::savepath)) {
+		std::cout << "Save to file." << std::endl;
+		std::ofstream ofs (config.value<std::string>(plan_iface::planpath).c_str());
+		plan(ofs, p);
+	}
 }
 
 lib::UI_TO_ECP_REPLY swarmitfix::step_mode(Mbase::ItemType & item)

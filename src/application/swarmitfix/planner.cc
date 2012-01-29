@@ -17,13 +17,11 @@
 #include "planner.h"
 #include "plan.hxx"
 
-std::string planner::planpath = "planpath";
-
 planner::planner(const std::string & path) :
 	state(STOPPED)
 {
 	// Parse the plan file.
-	p = readPlanFromFile(path);
+	p = plan_iface::readPlanFromFile(path);
 
 	// Start triggering operation.
 	worker = boost::thread(boost::bind(&planner::operator(), this));

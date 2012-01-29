@@ -24,7 +24,7 @@ task* return_created_mp_task(lib::configurator &_config)
 
 swarmitfix::swarmitfix(lib::configurator &_config) :
 		task(_config),
-		pp(_config.value<std::string>(planner::planpath))
+		pp(_config.value<std::string>(plan_iface::planpath))
 {
 	// Create optional Input buffers
 	if(IS_MP_ROBOT_ACTIVE(shead2)) {

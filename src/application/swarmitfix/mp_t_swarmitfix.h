@@ -15,6 +15,7 @@
 #include "robot/smb/dp_smb.h"
 #include "robot/sbench/dp_sbench.h"
 #include "planner.h"
+#include "../swarmitfix_plan/plan_iface.h"
 
 #include "base/ecp_mp/ecp_ui_msg.h"
 #include "base/mp/mp_exceptions.h"

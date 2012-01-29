@@ -98,6 +98,7 @@ enum UI_TO_ECP_REPLY
 	MAM_CALIBRATE,
 
 	//! Swarm-related entries
+	PLAN_PLAY,
 	PLAN_PREV,
 	PLAN_NEXT,
 	PLAN_EXEC,

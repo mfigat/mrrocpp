@@ -52,6 +52,16 @@ private:
 		} mbase_item;
 	} clipboard;
 
+	//! PKM pose actually executed by the robot.
+	struct {
+		double x, y, z, alpha, beta, gamma, head;
+	} pkm_pose;
+
+	//! MBASE rotation actually executed by the robot.
+	struct {
+		double pkmTheta;
+	} mbase_pose;
+
 	//! Index of the last executed action (to enable fine-tuning only after EXEC).
 	int last_executed_ind;
 
@@ -62,6 +72,9 @@ private:
 
 	//! Reload inputs with original request.
 	void reload();
+
+	//! Execute item with the current values of input widgets.
+	void execute(lib::UI_TO_ECP_REPLY reply_type);
 
 	//! Change state of the navigation buttons.
 	void enableNavigation(bool enabled);
@@ -92,6 +105,7 @@ private:
 private slots:
 
 	// Navigation buttons.
+	void on_pushButton_play_clicked();
 	void on_pushButton_prev_clicked();
 	void on_pushButton_next_clicked();
 	void on_pushButton_exec_clicked();
@@ -116,9 +130,9 @@ private slots:
 	void on_pushbutton_copy_clicked();
 	void on_pushbutton_paste_clicked();
 
-	void finetune_pkm();
-	void finetune_head();
-	void finetune_mbase();
+	bool finetune_pkm();
+	bool finetune_head();
+	bool finetune_mbase();
 };
 
 #endif // WGT_PLAN_H

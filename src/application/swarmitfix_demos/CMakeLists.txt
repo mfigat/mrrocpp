@@ -37,11 +37,11 @@
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/../swarmitfix_plan) # for the "plan.hxx"
 
-add_executable(mp_single_agent_plan
+add_executable(mp_plan_executor
 	mp_t_demo_base.cc
-	mp_t_single_agent_plan.cc
+	mp_t_plan_executor.cc
 )
-target_link_libraries(mp_single_agent_plan mp plan kinematicsshead)
+target_link_libraries(mp_plan_executor mp plan kinematicsshead)
 
 
 
@@ -89,5 +89,5 @@ ecp_sbench_transparent
 #mp_sbench_test
 #mp_smb_powered_from_bench_test
 #mp_agent1_demo
-mp_single_agent_plan
+mp_plan_executor
 DESTINATION bin)

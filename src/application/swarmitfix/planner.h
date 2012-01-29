@@ -40,9 +40,6 @@ public:
 	//! Access to the plan data
 	Plan * getPlan(void) const;
 
-	//! Key with path to plan file
-	static std::string planpath;
-
 private:
 	//! Reference to the plan
 	boost::shared_ptr<Plan> p;

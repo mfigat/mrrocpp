@@ -1,5 +1,6 @@
 #include <QHideEvent>
 #include <QPlainTextEdit>
+#include <QMessageBox>
 
 #include "wgt_plan.h"
 
@@ -37,14 +38,23 @@ wgt_plan::wgt_plan(mrrocpp::ui::common::Interface& _interface, QWidget *parent) 
 	ui->setupUi(this);
 
 	// Setup button icons.
-	ui->pushButton_prev->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/media-seek-backward-32.png"));
-	ui->pushButton_next->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/media-seek-forward-32.png"));
+	ui->pushButton_prev->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/media-seek-backward-16.png"));
+	ui->pushButton_next->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/media-seek-forward-16.png"));
 	ui->pushButton_reload->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/refresh-32.png"));
-	ui->pushButton_save->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/standardbutton-save-32.png"));
-	ui->pushButton_exec->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/standardbutton-apply-32.png"));
+	ui->pushButton_save->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/standardbutton-save-16.png"));
+	ui->pushButton_exec->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/standardbutton-apply-16.png"));
+	ui->pushButton_play->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/media-play-16.png"));
 
-	ui->pushbutton_copy->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/standardbutton-copy-32.png"));
-	ui->pushbutton_paste->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/standardbutton-paste-32.png"));
+	// Setup combo box.
+	ui->poseType_input->insertItem(Type::UNKNOWN, Type::_xsd_Type_literals_[Type::UNKNOWN]);
+	ui->poseType_input->insertItem(Type::NEUTRAL, Type::_xsd_Type_literals_[Type::NEUTRAL]);
+	ui->poseType_input->insertItem(Type::PRE, Type::_xsd_Type_literals_[Type::PRE]);
+	ui->poseType_input->insertItem(Type::SUPPORT, Type::_xsd_Type_literals_[Type::SUPPORT]);
+	ui->poseType_input->insertItem(Type::POST, Type::_xsd_Type_literals_[Type::POST]);
+
+	// FIXME: These icons do not work.
+	// ui->pushbutton_copy->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/standardbutton-copy-32.png"));
+	// ui->pushbutton_paste->setIcon(QPixmap(":/trolltech/styles/commonstyle/images/standardbutton-paste-32.png"));
 
 	// Initially finetuning is disabled.
 	finetuning_active = false;
@@ -106,6 +116,15 @@ void wgt_plan::reload()
 				ui->TEnd_input->setValue(item.TEnd());
 				ui->ind_input->setValue(item.ind());
 
+				// Setup PKM state *BEFORE* setting the widgets.
+				pkm_pose.x = item.Xyz_Euler_Zyz()->x();
+				pkm_pose.y = item.Xyz_Euler_Zyz()->y();
+				pkm_pose.z = item.Xyz_Euler_Zyz()->z();
+				pkm_pose.alpha = item.Xyz_Euler_Zyz()->alpha();
+				pkm_pose.beta = item.Xyz_Euler_Zyz()->beta();
+				pkm_pose.gamma = item.Xyz_Euler_Zyz()->gamma();
+				pkm_pose.head = item.beta7();
+
 				// Setup input widgets.
 				ui->x_input->setValue(item.Xyz_Euler_Zyz()->x());
 				ui->y_input->setValue(item.Xyz_Euler_Zyz()->y());
@@ -130,6 +149,9 @@ void wgt_plan::reload()
 					finetuning_active = false;
 					ui->pushButton_save->setEnabled(false);
 				}
+
+				ui->poseType_input->setCurrentIndex(item.type());
+				ui->poseType_input->setEnabled(true);
 			}
 
 			// Disable/enable input containers
@@ -166,6 +188,9 @@ void wgt_plan::reload()
 				ui->TEnd_input->setValue(item.TEnd());
 				ui->ind_input->setValue(item.ind());
 
+				// Setup MBASE state *BEFORE* setting the widgets.
+				mbase_pose.pkmTheta = item.pkmTheta();
+
 				// Setup input widgets
 				ui->row1_input->setValue(item.pinIndices().item().at(0).row());
 				ui->column1_input->setValue(item.pinIndices().item().at(0).column());
@@ -200,6 +225,8 @@ void wgt_plan::reload()
 					finetuning_active = false;
 					ui->pushButton_save->setEnabled(false);
 				}
+
+				ui->poseType_input->setEnabled(false);
 			}
 
 			// Disable/enable input containers
@@ -225,6 +252,21 @@ void wgt_plan::my_open(bool set_on_top)
 	wgt_base::my_open(set_on_top);
 }
 
+void wgt_plan::on_pushButton_play_clicked()
+{
+	if(QMessageBox::critical(this,
+			"Are you sure?",
+			"Do you want to execute plan without interrupting\nstarting from the current plan item?",
+			QMessageBox::Ok,
+			QMessageBox::Cancel)
+		== QMessageBox::Ok) {
+
+		interface.ui_ecp_obj->ui_rep.reply = lib::PLAN_PLAY;
+
+		reply();
+	}
+}
+
 void wgt_plan::on_pushButton_prev_clicked()
 {
 	interface.ui_ecp_obj->ui_rep.reply = lib::PLAN_PREV;
@@ -239,9 +281,10 @@ void wgt_plan::on_pushButton_next_clicked()
 	reply();
 }
 
-void wgt_plan::on_pushButton_exec_clicked()
+void wgt_plan::execute(lib::UI_TO_ECP_REPLY reply_type)
 {
-	interface.ui_ecp_obj->ui_rep.reply = lib::PLAN_EXEC;
+	// Setup reply type.
+	interface.ui_ecp_obj->ui_rep.reply = reply_type;
 
 	// Use local references with short names.
 	const lib::ECP_message & request = interface.ui_ecp_obj->ecp_to_ui_msg;
@@ -282,6 +325,8 @@ void wgt_plan::on_pushButton_exec_clicked()
 				} else {
 					item.comment().reset();
 				}
+
+				item.type() = (Type::Value) ui->poseType_input->currentIndex();
 
 				// serialize data
 				os << item;
@@ -326,6 +371,11 @@ void wgt_plan::on_pushButton_exec_clicked()
 	reply.plan_item_string = ostr.str();
 
 	this->reply();
+}
+
+void wgt_plan::on_pushButton_exec_clicked()
+{
+	execute(lib::PLAN_EXEC);
 
 	// Record the last executed item.
 	last_executed_ind = ui->ind_input->value();
@@ -333,7 +383,7 @@ void wgt_plan::on_pushButton_exec_clicked()
 
 void wgt_plan::on_pushButton_save_clicked()
 {
-	interface.ui_ecp_obj->ui_rep.reply = lib::PLAN_SAVE;
+	execute(lib::PLAN_SAVE);
 
 	reply();
 }
@@ -475,48 +525,83 @@ void wgt_plan::on_pin_input_valueChanged(int i)
 
 void wgt_plan::on_x_input_valueChanged(double value)
 {
-	finetune_pkm();
+	if(finetune_pkm()) {
+		pkm_pose.x = value;
+	} else {
+		ui->x_input->setValue(pkm_pose.x);
+	}
 }
 
 void wgt_plan::on_y_input_valueChanged(double value)
 {
-	finetune_pkm();
+	if(finetune_pkm()) {
+		pkm_pose.y = value;
+	} else {
+		ui->y_input->setValue(pkm_pose.y);
+	}
 }
 
 void wgt_plan::on_z_input_valueChanged(double value)
 {
-	finetune_pkm();
+	if(finetune_pkm()) {
+		pkm_pose.z = value;
+	} else {
+		ui->z_input->setValue(pkm_pose.z);
+	}
 }
 
 void wgt_plan::on_alpha_input_valueChanged(double value)
 {
-	finetune_pkm();
+	if(finetune_pkm()) {
+		pkm_pose.alpha = value;
+	} else {
+		ui->alpha_input->setValue(pkm_pose.alpha);
+	}
 }
 
 void wgt_plan::on_beta_input_valueChanged(double value)
 {
-	finetune_pkm();
+	if(finetune_pkm()) {
+		pkm_pose.beta = value;
+	} else {
+		ui->beta_input->setValue(pkm_pose.beta);
+	}
 }
 
 void wgt_plan::on_gamma_input_valueChanged(double value)
 {
-	finetune_pkm();
+	if(finetune_pkm()) {
+		pkm_pose.gamma = value;
+	} else {
+		ui->gamma_input->setValue(pkm_pose.gamma);
+	}
 }
 
 void wgt_plan::on_head_input_valueChanged(double value)
 {
-	finetune_head();
+	if(finetune_head()) {
+		pkm_pose.head = value;
+	} else {
+		ui->head_input->setValue(pkm_pose.head);
+	}
 }
 
 void wgt_plan::on_pkmTheta_input_valueChanged(double value)
 {
-	finetune_mbase();
+	if(finetune_mbase()) {
+		mbase_pose.pkmTheta = value;
+	} else {
+		ui->pkmTheta_input->setValue(mbase_pose.pkmTheta);
+	}
 }
 
-void wgt_plan::finetune_head()
+bool wgt_plan::finetune_head()
 {
 	if(!finetuning_active)
-		return;
+		return false;
+
+	// Flag indicating status of the fine-tuning.
+	bool finetuned = false;
 
 	// Initialize robot iterator.
 	ui::common::robots_t::const_iterator it = interface.getRobots().end();
@@ -565,6 +650,8 @@ void wgt_plan::finetune_head()
 				// Execute.
 				try {
 					robot->ui_ecp_robot->move_joints(final_position);
+
+					finetuned = true;
 				}
 				CATCH_SECTION_UI_PTR
 			}
@@ -576,12 +663,17 @@ void wgt_plan::finetune_head()
 
 	// Disable saving until fine-tuned pose is executed.
 	ui->pushButton_save->setEnabled(false);
+
+	return finetuned;
 }
 
-void wgt_plan::finetune_pkm()
+bool wgt_plan::finetune_pkm()
 {
 	if(!finetuning_active)
-		return;
+		return false;
+
+	// Flag indicating status of the fine-tuning.
+	bool finetuned = false;
 
 	// Initialize robot iterator.
 	ui::common::robots_t::const_iterator it = interface.getRobots().end();
@@ -630,6 +722,8 @@ void wgt_plan::finetune_pkm()
 							lib::epos::SYNC_TRAPEZOIDAL,
 							lib::spkm::WRIST_XYZ_EULER_ZYZ,
 							0.0);
+
+					finetuned = true;
 				}
 				CATCH_SECTION_UI_PTR
 			}
@@ -641,12 +735,17 @@ void wgt_plan::finetune_pkm()
 
 	// Disable saving until fine-tuned pose is executed.
 	ui->pushButton_save->setEnabled(false);
+
+	return finetuned;
 }
 
-void wgt_plan::finetune_mbase()
+bool wgt_plan::finetune_mbase()
 {
 	if(!finetuning_active)
-		return;
+		return false;
+
+	// Flag indicating status of the fine-tuning.
+	bool finetuned = false;
 
 	// Initialize robot iterator.
 	ui::common::robots_t::const_iterator it = interface.getRobots().end();
@@ -688,6 +787,8 @@ void wgt_plan::finetune_mbase()
 				// Execute.
 				try {
 					robot->ui_ecp_robot->move_external(final_position, 0.0);
+
+					finetuned = true;
 				}
 				CATCH_SECTION_UI_PTR
 			}
@@ -699,6 +800,8 @@ void wgt_plan::finetune_mbase()
 
 	// Disable saving until fine-tuned pose is executed.
 	ui->pushButton_save->setEnabled(false);
+
+	return finetuned;
 }
 
 void wgt_plan::enableNavigation(bool enabled)
@@ -715,6 +818,7 @@ void wgt_plan::reply()
 	if (interface.ui_ecp_obj->communication_state != ui::common::UI_ECP_REPLY_READY) {
 		interface.ui_ecp_obj->ui_rep.reply = lib::QUIT;
 	}
+
 	interface.ui_ecp_obj->synchroniser.command();
 
 	this->setEnabled(false);

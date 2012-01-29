@@ -9,7 +9,6 @@
 #include <stdexcept>
 #include <iostream>
 #include <string>
-#include <list>
 
 #include "base/lib/com_buf.h"
 #include "base/ecp_mp/ecp_ui_msg.h"
@@ -33,7 +32,9 @@ private:
 
 public:
 	UI_ECP_COMMUNICATION_STATE communication_state;
+
 	const lib::ECP_message & ecp_to_ui_msg;
+
 	lib::UI_reply ui_rep;
 
 	//! main thread loop

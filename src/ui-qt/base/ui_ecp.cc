@@ -55,8 +55,8 @@ ecp_buffer::~ecp_buffer()
 //	// FIXME: pthread cancel is not portable.
 //	pthread_cancel(thread_id.native_handle());
 //
-//	thread_id.interrupt();
-//	thread_id.join(); // join it
+	thread_id.interrupt();
+	thread_id.join(); // join it
 }
 
 void ecp_buffer::operator()()
@@ -78,7 +78,11 @@ void ecp_buffer::operator()()
 		communication_state = UI_ECP_AFTER_REPLY;
 
 		int32_t type, subtype;
-		int rcvid = messip::port_receive(ch, type, subtype, _ecp_to_ui_msg);
+		int rcvid = messip::port_receive(ch, type, subtype, _ecp_to_ui_msg, 10);
+
+		if (rcvid == MESSIP_MSG_TIMEOUT) {
+			boost::this_thread::interruption_point();
+		}
 
 		if ((rcvid != MESSIP_MSG_NOREPLY) && (rcvid != 0)) {
 			continue;
@@ -94,7 +98,6 @@ void ecp_buffer::operator()()
 		synchroniser.wait();
 
 		messip::port_reply(ch, rcvid, 0, ui_rep);
-
 	}
 
 }

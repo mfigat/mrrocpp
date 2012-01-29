@@ -11,9 +11,14 @@
 #include <boost/filesystem.hpp>
 #include <boost/version.hpp>
 
+#include "plan_iface.h"
+
 #include "plan.hxx"
 
-std::auto_ptr <Plan> readPlanFromFile(const std::string & path)
+std::string plan_iface::planpath = "planpath";
+std::string plan_iface::savepath = "savepath";
+
+std::auto_ptr <Plan> plan_iface::readPlanFromFile(const std::string & path)
 {
 	// Assume, that the XSD file is installed in the binary folder
 	boost::filesystem::path xsdpath = boost::filesystem::current_path();

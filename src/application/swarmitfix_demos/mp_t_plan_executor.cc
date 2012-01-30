@@ -226,6 +226,12 @@ void plan_executor::executeCommandItem(const Plan::MbaseType::ItemType & smbCmd,
 					// Setup start pose.
 					lib::sbench::bench_pose start_pose = bench_locations.at(smbCmd.agent());
 
+					if(start_pose.pins[smbCmd.actions().item().front().pin()-1].column != final_pose.pins[smbCmd.actions().item().front().pin()-1].column
+							|| start_pose.pins[smbCmd.actions().item().front().pin()-1].row != final_pose.pins[smbCmd.actions().item().front().pin()-1].row)
+					{
+						throw std::runtime_error("start_pose@rotation pin is different than final_pose@rotation_pin");
+					}
+
 					supply_state.set_off(start_pose);
 					supply_state.set_on(rotation_pin);
 
@@ -525,10 +531,10 @@ void plan_executor::main_task_algorithm(void)
 						dir = 0;
 						break;
 					case lib::PLAN_PLAY:
-						currentActionState = (State *) &(*pkm_it);
-						start_timestamp = boost::get_system_time();
-						executeCommandItem(*pkm_it);
-						record_timestamp = true;
+//						currentActionState = (State *) &(*pkm_it);
+//						start_timestamp = boost::get_system_time();
+//						executeCommandItem(*pkm_it);
+//						record_timestamp = true;
 						dir = 1;
 						execute_plan_in_step_mode = false;
 						break;
@@ -565,10 +571,10 @@ void plan_executor::main_task_algorithm(void)
 						dir = 0;
 						break;
 					case lib::PLAN_PLAY:
-						currentActionState = (State *) &(*smb_it);
-						start_timestamp = boost::get_system_time();
-						executeCommandItem(*smb_it, dir);
-						record_timestamp = true;
+//						currentActionState = (State *) &(*smb_it);
+//						start_timestamp = boost::get_system_time();
+//						executeCommandItem(*smb_it, dir);
+//						record_timestamp = true;
 						dir = 1;
 						execute_plan_in_step_mode = false;
 						break;

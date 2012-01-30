@@ -6,6 +6,7 @@
  */
 
 #include <fstream>
+#include <limits>
 
 #include <boost/foreach.hpp>
 #include <boost/thread/thread.hpp>
@@ -474,7 +475,7 @@ void plan_executor::main_task_algorithm(void)
 	bool execute_plan_in_step_mode = true;
 
 	// Time index counter
-	int indMin = 99999999, indMax = 0;
+	int indMin = std::numeric_limits<int>::max(), indMax = std::numeric_limits<int>::min();
 
 	// Setup index counter at the beginning of the plan
 	BOOST_FOREACH(const Plan::PkmType::ItemType & it, p->pkm().item()) {
@@ -486,15 +487,12 @@ void plan_executor::main_task_algorithm(void)
 		if(indMax < it.ind()) indMax = it.ind();
 	}
 
-	// Make sure that modulo 100 arithmetics operate on positives.
-	assert(indMin > -99);
-
 	for (int ind = indMin, dir = 0; true; ind += dir) {
 
 		if(ind < indMin) ind = indMin;
 		if(ind > indMax) ind = indMax;
 
-		std::cout << "plan index = " << ind << std::endl;
+		// std::cout << "plan index = " << ind << std::endl;
 
 		// Diagnostic timestamp
 		boost::system_time start_timestamp;

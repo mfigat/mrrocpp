@@ -122,6 +122,9 @@ protected:
 	 */
 	virtual void create_kinematic_models_for_given_robot(void);
 
+	//! If we are running on the fullspeed.
+	int fullspeed;
+
 public:
 
 	/*!

@@ -36,16 +36,27 @@ namespace smb {
 #define PARAMS ((mrrocpp::kinematics::smb::model*)this->get_current_kinematic_model())
 
 // Maximum velocity: legs (verified for 2000 rpm), pkm (verified for 2000 rpm).
-const uint32_t effector::Vdefault[lib::smb::NUM_OF_SERVOS] = { 500UL, 100UL };
+const uint32_t effector::Vdefault[lib::smb::NUM_OF_SERVOS] = { 500UL, 1000UL };
 // Maximum acceleration: legs (verified for 4000 rpm/s), pkm (verified for 4000 rpm/s).
-const uint32_t effector::Adefault[lib::smb::NUM_OF_SERVOS] = { 500UL, 100UL };
+const uint32_t effector::Adefault[lib::smb::NUM_OF_SERVOS] = { 500UL, 1000UL };
 // Maximum deceleration: legs (verified for 4000 rpm/s), pkm (verified for 4000 rpm/s).
-const uint32_t effector::Ddefault[lib::smb::NUM_OF_SERVOS] = { 500UL, 100UL };
+const uint32_t effector::Ddefault[lib::smb::NUM_OF_SERVOS] = { 500UL, 1000UL };
 
 effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
-		motor_driven_effector(_shell, l_robot_name, instruction, reply), cleaning_active(false)
+		motor_driven_effector(_shell, l_robot_name, instruction, reply), cleaning_active(false),
+		fullspeed(0)
 {
 	DEBUG_METHOD;
+
+	if(config.exists("fullspeed")) {
+		 fullspeed = config.value<int>("fullspeed");
+	}
+
+	if(fullspeed > 0) {
+		msg->message("Fullspeed enabled");
+	} else {
+		msg->message("Fullspeed NOT enabled");
+	}
 
 	number_of_servos = lib::smb::NUM_OF_SERVOS;
 
@@ -151,8 +162,8 @@ void effector::synchronise(void)
 			pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, false, false);
 
 			// Restore velocity and acceleration limits.
-			pkm_rotation_node->setMaxProfileVelocity(Vdefault[1]);
-			pkm_rotation_node->setMaxAcceleration(Adefault[1]);
+			pkm_rotation_node->setMaxProfileVelocity(Vdefault[1]/10);
+			pkm_rotation_node->setMaxAcceleration(Adefault[1]/10);
 
 			// Step 2: Homing.
 			// Activate homing mode.
@@ -579,10 +590,17 @@ void effector::execute_motor_motion()
 			// Perform pkm rotation only when motor is enabled.
 			if (!pkm_rotation_disabled) {
 				// Set velocity and acceleration values.
-				pkm_rotation_node->setProfileVelocity(Vdefault[1]);
-				pkm_rotation_node->setProfileAcceleration(Adefault[1]);
-				pkm_rotation_node->setProfileDeceleration(Ddefault[1]);
-				pkm_rotation_node->moveAbsolute(desired_motor_pos_new[1]);
+				if(fullspeed) {
+					pkm_rotation_node->setProfileVelocity(Vdefault[1]);
+					pkm_rotation_node->setProfileAcceleration(Adefault[1]);
+					pkm_rotation_node->setProfileDeceleration(Ddefault[1]);
+					pkm_rotation_node->moveAbsolute(desired_motor_pos_new[1]);
+				} else {
+					pkm_rotation_node->setProfileVelocity(Vdefault[1]/10);
+					pkm_rotation_node->setProfileAcceleration(Adefault[1]/10);
+					pkm_rotation_node->setProfileDeceleration(Ddefault[1]/10);
+					pkm_rotation_node->moveAbsolute(desired_motor_pos_new[1]);
+				}
 			}
 		} else {
 			for (size_t i = 0; i < axes.size(); ++i) {
@@ -607,9 +625,9 @@ void effector::execute_motor_motion()
 			// Perform pkm rotation only when motor is enabled.
 			if (!pkm_rotation_disabled) {
 				// Set velocity and acceleration values.
-				pkm_rotation_node->setProfileVelocity(Vdefault[1]);
-				pkm_rotation_node->setProfileAcceleration(Adefault[1]);
-				pkm_rotation_node->setProfileDeceleration(Ddefault[1]);
+				pkm_rotation_node->setProfileVelocity(Vdefault[1]/10);
+				pkm_rotation_node->setProfileAcceleration(Adefault[1]/10);
+				pkm_rotation_node->setProfileDeceleration(Ddefault[1]/10);
 				pkm_rotation_node->moveRelative(desired_motor_pos_new[1]);
 			}
 		} else {

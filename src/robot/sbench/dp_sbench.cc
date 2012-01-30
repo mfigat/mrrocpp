@@ -157,7 +157,6 @@ cleaning_state::cleaning_state() :
 	if (is_any_doubled_value()) {
 		std::cout << "multiply value at preasure_translation_table dp_sbench\n\n\n";
 	}
-
 }
 
 } // namespace robot

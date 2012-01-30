@@ -202,7 +202,10 @@ void demo_base::control_bench_power_supply(const mrrocpp::lib::sbench::power_sup
 	this->sr_ecp_msg->message(ps_.display());
 	set_next_ecp_state(mrrocpp::ecp_mp::sbench::generator::POWER_SUPPLY_COMMAND, 0, ps_, lib::sbench::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::sbench::ROBOT_NAME.c_str());
-	wait_ms(delay_);
+
+	if(delay_) {
+		wait_ms(delay_);
+	}
 }
 
 void demo_base::control_bench_cleaning(const mrrocpp::lib::sbench::cleaning_state & cs_, int delay_) {
@@ -210,7 +213,10 @@ void demo_base::control_bench_cleaning(const mrrocpp::lib::sbench::cleaning_stat
 	this->sr_ecp_msg->message(cs_.display());
 	set_next_ecp_state(mrrocpp::ecp_mp::sbench::generator::CLEANING_COMMAND, 0, cs_, lib::sbench::ROBOT_NAME);
 	wait_for_task_termination(false, 1, lib::sbench::ROBOT_NAME.c_str());
-	wait_ms(delay_);
+
+	if(delay_) {
+		wait_ms(delay_);
+	}
 }
 
 void demo_base::bench_execute_power_move(const power_smb_move & move_, unsigned int delay_) {

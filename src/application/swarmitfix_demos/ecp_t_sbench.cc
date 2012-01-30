@@ -25,10 +25,6 @@ transparent::transparent(lib::configurator &_config) :
 	// Create the bench robot.
 	ecp_m_robot = (boost::shared_ptr <robot_t>) new sbench::robot(*this);
 
-	// Create the generators
-	g_cleaning = (boost::shared_ptr <generator::cleaning>) new generator::cleaning(*this);
-	g_power_supply = (boost::shared_ptr <generator::power_supply>) new generator::power_supply(*this);
-
 	sr_ecp_msg->message("Transparent task loaded");
 }
 
@@ -36,9 +32,25 @@ void transparent::mp_2_ecp_next_state_string_handler(void)
 {
 	// Choose generator basing on the received command.
 	if (mp_2_ecp_next_state_string == ecp_mp::sbench::generator::CLEANING_COMMAND) {
-		g_cleaning->Move();
+
+		generator::cleaning g_cleaning(*this);
+
+		g_cleaning.Move();
+
 	} else if (mp_2_ecp_next_state_string == ecp_mp::sbench::generator::POWER_SUPPLY_COMMAND) {
-		g_power_supply->Move();
+
+		generator::power_supply g_power_supply(*this);
+
+		g_power_supply.Move();
+
+	} else if (mp_2_ecp_next_state_string == ecp_mp::sbench::generator::POWER_SUPPLY_STATUS) {
+
+		generator::power_status g_status(*this);
+
+		g_status.Move();
+
+	} else {
+		assert(0);
 	}
 }
 

@@ -75,12 +75,31 @@ protected:
 		return it;
 	}
 
-	//! Indices of the last command executed by the agents.
+	//! Indices of the last command executed by the PKMs.
 	typedef boost::unordered_map<Plan::PkmType::ItemType::AgentType, Plan::PkmType::ItemType::TypeType> pkm_state_t;
 	pkm_state_t pkm_last_state;
 
+	//! Locations on the bench.
+	typedef boost::unordered_map<Plan::PkmType::ItemType::AgentType, lib::sbench::bench_pose> bench_locations_t;
+	bench_locations_t bench_locations;
+
+	//! State of the bench supply.
+	lib::sbench::power_supply_state supply_state;
+
 	//! Flag for enabling walking.
 	int walking_enabled;
+
+	//! Enable cleaning.
+	int cleaning_active;
+
+	//! Cleaning time.
+	int cleaning_time;
+
+	//! Control power supply.
+	int voltage_from_bench;
+
+	//! Head control.
+	int vacuum_active, solidify_active;
 };
 
 /** @} */// end of swarmitfix

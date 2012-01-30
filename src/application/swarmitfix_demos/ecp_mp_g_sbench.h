@@ -11,6 +11,8 @@ namespace generator {
  */
 const std::string POWER_SUPPLY_COMMAND = "POWER_SUPPLY_COMMAND";
 
+const std::string POWER_SUPPLY_STATUS = "POWER_SUPPLY_STATUS";
+
 /*!
  * Name used during sending cleaning commands between MP and ECP.
  */

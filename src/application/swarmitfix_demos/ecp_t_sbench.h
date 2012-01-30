@@ -29,13 +29,6 @@ namespace task {
  */
 class transparent : public common::task::_task <ecp::sbench::robot>
 {
-protected:
-	//! Controls the bench power supply.
-	boost::shared_ptr <generator::power_supply> g_power_supply;
-
-	//! Controls the bench cleaning.
-	boost::shared_ptr <generator::cleaning> g_cleaning;
-
 public:
 	//! Created the utilized generators.
 	transparent(lib::configurator &_config);

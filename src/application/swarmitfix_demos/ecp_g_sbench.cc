@@ -11,6 +11,8 @@
 #include "base/ecp/ecp_robot.h"
 #include "ecp_g_sbench.h"
 
+#include <boost/archive/text_oarchive.hpp>
+
 namespace mrrocpp {
 namespace ecp {
 namespace sbench {
@@ -42,6 +44,40 @@ bool power_supply::first_step()
 bool power_supply::next_step()
 {
 	sr_ecp_msg.message("power_supply: next_step");
+	return false;
+}
+
+power_status::power_status(task_t & _ecp_task) :
+		generator_t(_ecp_task)
+{
+
+}
+
+bool power_status::first_step()
+{
+	sr_ecp_msg.message("power_status: first_step");
+
+	// Prepare adequate requests.
+	the_robot->data_request_port.set_request();
+
+	return true;
+}
+
+bool power_status::next_step()
+{
+	the_robot->data_request_port.data.voltage_buf;
+
+	// Create the text representation.
+	std::ostringstream ostr;
+	{
+		boost::archive::text_oarchive oa(ostr);
+
+		// serialize data
+		oa << the_robot->data_request_port.data.voltage_buf;
+	}
+
+	strncpy(ecp_t.ecp_reply.recognized_command, ostr.str().c_str(), 300);
+
 	return false;
 }
 

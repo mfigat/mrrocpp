@@ -51,6 +51,32 @@ private:
 	lib::sbench::power_supply_state mp_ecp_power_supply_command;
 };
 
+class power_status : public common::generator::_generator <ecp::sbench::robot>
+{
+public:
+	/*!
+	 * Empty.
+	 * @param _ecp_task ecp task object reference.
+	 */
+	power_status(task_t & _ecp_task);
+
+	/*!
+	 * Passes the received MP command to EDP.
+	 */
+	bool first_step();
+
+	/*!
+	 * Empty - returns false.
+	 */
+	bool next_step();
+
+private:
+	/*!
+	 * Command received from MP.
+	 */
+	lib::sbench::power_supply_state mp_ecp_power_supply_command;
+};
+
 
 /*!
  * @brief Cleaning generator forwards the command prepared by MP to EDP regarding the control of the pressure in the FESTO cleaning valves.

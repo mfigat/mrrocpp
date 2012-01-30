@@ -34,10 +34,6 @@ swarmitfix::swarmitfix(lib::configurator &_config) :
 		// TODO: throw?
 	}
 
-
-
-
-
 	sr_ecp_msg->message("ecp smb transparent loaded");
 }
 

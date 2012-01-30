@@ -76,7 +76,12 @@ bool power_status::next_step()
 		oa << the_robot->data_request_port.data.voltage_buf;
 	}
 
-	strncpy(ecp_t.ecp_reply.recognized_command, ostr.str().c_str(), 300);
+	// Check for overwrite.
+	assert(ostr.str().length() < lib::ECP_2_MP_STRING_SIZE);
+
+	std::cerr << "power_status: data buffer size = " << ostr.str().length() << std::endl;
+
+	strncpy(ecp_t.ecp_reply.recognized_command, ostr.str().c_str(), lib::ECP_2_MP_STRING_SIZE);
 
 	return false;
 }

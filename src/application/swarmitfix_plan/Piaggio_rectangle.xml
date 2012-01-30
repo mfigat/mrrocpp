@@ -37,7 +37,7 @@
       <agent>1</agent>
       <TBeg>21.002</TBeg>
       <TEnd>57.901</TEnd>
-      <state_reached_in_time>0.034</state_reached_in_time>
+      <state_reached_in_time>0.033</state_reached_in_time>
       <ind>150</ind>
       <pinIndices>
         <item>
@@ -98,7 +98,7 @@
       <agent>1</agent>
       <TBeg>21.002</TBeg>
       <TEnd>57.901</TEnd>
-      <state_reached_in_time>0.021</state_reached_in_time>
+      <state_reached_in_time>8.815</state_reached_in_time>
       <ind>350</ind>
       <pinIndices>
         <item>
@@ -159,7 +159,7 @@
       <agent>1</agent>
       <TBeg>21.002</TBeg>
       <TEnd>57.901</TEnd>
-      <state_reached_in_time>0.019</state_reached_in_time>
+      <state_reached_in_time>11.362</state_reached_in_time>
       <ind>550</ind>
       <pinIndices>
         <item>
@@ -309,7 +309,6 @@
       </actions>
       <numActions>1</numActions>
     </item>
-    
     <item>
       <agent>1</agent>
       <TBeg>21.002</TBeg>
@@ -340,7 +339,6 @@
       </actions>
       <numActions>1</numActions>
     </item>
-    
     <item>
       <agent>1</agent>
       <TBeg>21.002</TBeg>
@@ -371,7 +369,6 @@
       </actions>
       <numActions>1</numActions>
     </item>
-    
   </mbase>
 
   <pkm>
@@ -459,7 +456,7 @@
       <agent>1</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
-      <state_reached_in_time>7.343</state_reached_in_time>
+      <state_reached_in_time>7.359</state_reached_in_time>
       <ind>120</ind>
       <beta7>-0.5236</beta7>
       <Xyz_Euler_Zyz>
@@ -475,7 +472,7 @@
       <agent>1</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
-      <state_reached_in_time>7.328</state_reached_in_time>
+      <state_reached_in_time>7.342</state_reached_in_time>
       <ind>140</ind>
       <beta7>-0.5236</beta7>
       <Xyz_Euler_Zyz>
@@ -811,7 +808,7 @@
       <agent>1</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
-      <state_reached_in_time>0.05</state_reached_in_time>
+      <state_reached_in_time>0.09</state_reached_in_time>
       <ind>560</ind>
       <beta7>-0.5236</beta7>
       <Xyz_Euler_Zyz>
@@ -827,7 +824,7 @@
       <agent>1</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
-      <state_reached_in_time>9.435</state_reached_in_time>
+      <state_reached_in_time>9.45</state_reached_in_time>
       <ind>580</ind>
       <beta7>-0.5236</beta7>
       <Xyz_Euler_Zyz>
@@ -843,7 +840,7 @@
       <agent>1</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
-      <state_reached_in_time>1.776</state_reached_in_time>
+      <state_reached_in_time>1.787</state_reached_in_time>
       <ind>600</ind>
       <beta7>-0.5236</beta7>
       <Xyz_Euler_Zyz>
@@ -907,7 +904,7 @@
       <agent>2</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
-      <state_reached_in_time>14.098</state_reached_in_time>
+      <state_reached_in_time>14.1</state_reached_in_time>
       <ind>665</ind>
       <beta7>-0.7464</beta7>
       <Xyz_Euler_Zyz>
@@ -923,7 +920,7 @@
       <agent>2</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
-      <state_reached_in_time>2.701</state_reached_in_time>
+      <state_reached_in_time>2.706</state_reached_in_time>
       <ind>670</ind>
       <beta7>-0.7464</beta7>
       <Xyz_Euler_Zyz>
@@ -939,7 +936,7 @@
       <agent>2</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
-      <state_reached_in_time>2.809</state_reached_in_time>
+      <state_reached_in_time>2.802</state_reached_in_time>
       <ind>680</ind>
       <beta7>-0.7464</beta7>
       <Xyz_Euler_Zyz>
@@ -955,7 +952,7 @@
       <agent>2</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
-      <state_reached_in_time>1.73</state_reached_in_time>
+      <state_reached_in_time>1.731</state_reached_in_time>
       <ind>700</ind>
       <beta7>-0.7464</beta7>
       <Xyz_Euler_Zyz>
@@ -971,7 +968,7 @@
       <agent>1</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
-      <state_reached_in_time>1.307</state_reached_in_time>
+      <state_reached_in_time>1.313</state_reached_in_time>
       <ind>720</ind>
       <beta7>-0.5236</beta7>
       <Xyz_Euler_Zyz>
@@ -987,7 +984,7 @@
       <agent>1</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
-      <state_reached_in_time>0.042</state_reached_in_time>
+      <state_reached_in_time>0.06</state_reached_in_time>
       <ind>740</ind>
       <beta7>-0.5236</beta7>
       <Xyz_Euler_Zyz>
@@ -1003,9 +1000,9 @@
       <agent>1</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
-      <state_reached_in_time>11.754</state_reached_in_time>
+      <state_reached_in_time>4.211</state_reached_in_time>
       <ind>760</ind>
-      <beta7>0.5236</beta7>
+      <beta7>-0.5236</beta7>
       <Xyz_Euler_Zyz>
         <x>-0.0049</x>
         <y>0</y>

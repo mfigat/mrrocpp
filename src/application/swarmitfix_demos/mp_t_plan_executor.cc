@@ -272,13 +272,22 @@ void plan_executor::executeCommandItem(const Plan::MbaseType::ItemType & smbCmd,
 
 				control_bench_cleaning(cleaning, cleaning_time);
 
-				cleaning.set_all_off();
+				if(cleaning_active < 2) {
+					cleaning.set_all_off();
 
-				control_bench_cleaning(cleaning, 0);
+					control_bench_cleaning(cleaning, 0);
+				}
 			}
 
 			// Land.
 			smb_pull_legs(smb_robot_name, lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+
+			// Disable cleaning.
+			if(cleaning_active > 1) {
+				lib::sbench::cleaning_state cleaning;
+
+				control_bench_cleaning(cleaning, 0);
+			}
 
 		} else {
 			smb_rotate_external(smb_robot_name, 0, smbCmd.pkmTheta());

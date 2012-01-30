@@ -282,7 +282,9 @@ void demo_base::smb_execute_power_move(const lib::robot_name_t & robot_name, con
 
 	// Rotate on the leg.
 	rotate_smb(robot_name, move_.rotation_leg.leg, move_.rotation_leg.rotation);
-	wait_ms(delay_);
+	if(delay_) {
+		wait_ms(delay_);
+	}
 
 	// Power the final pose.
 	power.set_on(move_.final_pose);
@@ -306,7 +308,9 @@ void demo_base::smb_execute_power_move_with_cleaning(const lib::robot_name_t & r
 	// Stand on one leg and rotate around it - the SPKM rotation is set to zero
 	smb_stan_on_one_leg(robot_name, move_.rotation_leg.leg);
 	smb_rotate_external(robot_name, move_.rotation_leg.rotation, 0);
-	wait_ms(delay_);
+	if(delay_) {
+		wait_ms(delay_);
+	}
 
 	// Turn the cleaning on two pins of the desired pose.
 	cleaning.set_on(move_.final_pose);

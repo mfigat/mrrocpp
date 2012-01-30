@@ -509,6 +509,9 @@
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
+            <property name="keyboardTracking">
+             <bool>false</bool>
+            </property>
             <property name="suffix">
              <string> rad</string>
             </property>
@@ -674,10 +677,10 @@
            <number>4</number>
           </property>
           <property name="minimum">
-           <double>-4.000000000000000</double>
+           <double>0.000000000000000</double>
           </property>
           <property name="maximum">
-           <double>4.000000000000000</double>
+           <double>6.000000000000000</double>
           </property>
           <property name="singleStep">
            <double>0.001000000000000</double>

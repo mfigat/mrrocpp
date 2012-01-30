@@ -78,6 +78,9 @@ protected:
 	//! Indices of the last command executed by the agents.
 	typedef boost::unordered_map<Plan::PkmType::ItemType::AgentType, Plan::PkmType::ItemType::TypeType> pkm_state_t;
 	pkm_state_t pkm_last_state;
+
+	//! Flag for enabling walking.
+	int walking_enabled;
 };
 
 /** @} */// end of swarmitfix

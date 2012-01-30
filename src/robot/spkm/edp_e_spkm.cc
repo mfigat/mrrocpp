@@ -58,29 +58,54 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 {
 	DEBUG_METHOD;
 
-	// Set default motor velocities, accelerations and decelerations for axis 0 - leg A.
-	// TODO: apply original values: V = 5000UL, A = 50000UL
-	Vdefault[0] = 1000UL;
-	MotorVmax[0] = 1000UL;
-	Adefault[0] = 10000UL;
-	Ddefault[0] = 10000UL;
-	MotorAmax[0] = 10000UL;
+	if(config.exists("fullspeed") && config.value<int>("fullspeed") > 0) {
+		// Set default motor velocities, accelerations and decelerations for axis 0 - leg A.
+		// TODO: apply original values: V = 5000UL, A = 50000UL
+		Vdefault[0] = 5000UL;
+		MotorVmax[0] = 5000UL;
+		Adefault[0] = 50000UL;
+		Ddefault[0] = 50000UL;
+		MotorAmax[0] = 50000UL;
 
-	// Set default motor velocities, accelerations and decelerations for axis 1 - leg B.
-	// TODO: apply original values: V = 5000UL, A = 50000UL
-	Vdefault[1] = 1000UL;
-	MotorVmax[1] = 1000UL;
-	Adefault[1] = 10000UL;
-	Ddefault[1] = 10000UL;
-	MotorAmax[1] = 10000UL;
+		// Set default motor velocities, accelerations and decelerations for axis 1 - leg B.
+		// TODO: apply original values: V = 5000UL, A = 50000UL
+		Vdefault[1] = 1000UL;
+		MotorVmax[1] = 1000UL;
+		Adefault[1] = 10000UL;
+		Ddefault[1] = 10000UL;
+		MotorAmax[1] = 10000UL;
 
-	// Set default motor velocities, accelerations and decelerations for axis 2 - leg C.
-	// TODO: apply original values: V = 5000UL, A = 50000UL
-	Vdefault[2] = 1000UL;
-	MotorVmax[2] = 1000UL;
-	Adefault[2] = 10000UL;
-	Ddefault[2] = 10000UL;
-	MotorAmax[2] = 10000UL;
+		// Set default motor velocities, accelerations and decelerations for axis 2 - leg C.
+		// TODO: apply original values: V = 5000UL, A = 50000UL
+		Vdefault[2] = 5000UL;
+		MotorVmax[2] = 5000UL;
+		Adefault[2] = 50000UL;
+		Ddefault[2] = 50000UL;
+		MotorAmax[2] = 50000UL;
+
+	} else {
+		// Set default motor velocities, accelerations and decelerations for axis 0 - leg A.
+		Vdefault[0] = 1000UL;
+		MotorVmax[0] = 1000UL;
+		Adefault[0] = 10000UL;
+		Ddefault[0] = 10000UL;
+		MotorAmax[0] = 10000UL;
+
+		// Set default motor velocities, accelerations and decelerations for axis 1 - leg B.
+		Vdefault[1] = 1000UL;
+		MotorVmax[1] = 1000UL;
+		Adefault[1] = 10000UL;
+		Ddefault[1] = 10000UL;
+		MotorAmax[1] = 10000UL;
+
+		// Set default motor velocities, accelerations and decelerations for axis 2 - leg C.
+		Vdefault[2] = 1000UL;
+		MotorVmax[2] = 1000UL;
+		Adefault[2] = 10000UL;
+		Ddefault[2] = 10000UL;
+		MotorAmax[2] = 10000UL;
+	}
+
 
 	// Set default motor velocities, accelerations and decelerations for axis 3 - (lower wrist rotation - "axis 1").
 	Vdefault[3] = 5000UL;

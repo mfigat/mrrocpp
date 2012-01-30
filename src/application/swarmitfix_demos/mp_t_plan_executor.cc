@@ -36,9 +36,6 @@ void plan_executor::executeCommandItem(const Plan::PkmType::ItemType & pkmCmd)
 	// Make sure that there are only Xyz-Euler-Zyz coordinates.
 	assert(pkmCmd.pkmToWrist().present() == false);
 
-	// Only n*20 index allowed for base commands.
-	assert((pkmCmd.ind() + 100) % 20 == 0);
-
 	// Check if command is allowed in a given state.
 	const Plan::PkmType::ItemType::TypeType last_state = pkm_last_state.at(pkmCmd.agent());
 	const Plan::PkmType::ItemType::TypeType new_state = pkmCmd.type();
@@ -140,10 +137,10 @@ void plan_executor::executeCommandItem(const Plan::PkmType::ItemType & pkmCmd)
 		shead_solidify(shead_robot_name, false);
 		shead_vacuum(shead_robot_name, false);
 
-		switch((pkmCmd.ind() + 100) % 100) {
-			case 0:
-			case 40:
-			case 80:
+		switch(pkmCmd.type()) {
+			case Type::SUPPORT:
+			case Type::NEUTRAL:
+			case Type::PRE:
 				move_shead_joints(shead_robot_name, head_pose);
 				break;
 			default:
@@ -156,8 +153,8 @@ void plan_executor::executeCommandItem(const Plan::PkmType::ItemType & pkmCmd)
 
 	// POST-head command;
 	if(is_robot_activated(shead_robot_name)) {
-		switch((pkmCmd.ind() + 100) % 100) {
-			case 0:
+		switch(pkmCmd.type()) {
+			case Type::SUPPORT:
 				// Apply vacuum...
 				shead_vacuum(shead_robot_name, false); // FIXME: turn on the vacuum.
 				// ...wait a while...
@@ -204,13 +201,27 @@ void plan_executor::executeCommandItem(const Plan::MbaseType::ItemType & smbCmd,
 
 	// Check if robot name match with item.
 	if(is_robot_activated(smb_robot_name)) {
-		// Execute command.
-		smb_rotate_external(smb_robot_name, 0, smbCmd.pkmTheta());
+		// Do we want to translocate?
+		if(smbCmd.actions().item().front().pin() && smbCmd.actions().item().front().dThetaInd() && walking_enabled > 0) {
+			smb_stan_on_one_leg(smb_robot_name, smbCmd.actions().item().front().pin());
+
+			if(walking_enabled > 1) {
+				smb_rotate_external(smb_robot_name, smbCmd.actions().item().front().dThetaInd(), smbCmd.pkmTheta());
+			} else {
+				smb_rotate_external(smb_robot_name, 0, smbCmd.pkmTheta());
+			}
+
+			smb_pull_legs(smb_robot_name, lib::smb::OUT, lib::smb::OUT, lib::smb::OUT);
+
+		} else {
+			smb_rotate_external(smb_robot_name, 0, smbCmd.pkmTheta());
+		}
 	}
 }
 
 plan_executor::plan_executor(lib::configurator &config_) :
-		demo_base(config_)
+		demo_base(config_),
+		walking_enabled(0)
 {
 	// Read plan from file.
 	try {
@@ -230,6 +241,9 @@ plan_executor::plan_executor(lib::configurator &config_) :
 	// Initialize state of the agents.
 	pkm_last_state.insert(pkm_state_t::value_type(Plan::PkmType::ItemType::AgentType(1), Type(Type::UNKNOWN)));
 	pkm_last_state.insert(pkm_state_t::value_type(Plan::PkmType::ItemType::AgentType(2), Type(Type::UNKNOWN)));
+
+	// Get the configuration.
+	walking_enabled = config.value<int>("walking_enabled");
 }
 
 void plan_executor::create_robots()

@@ -59,6 +59,9 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 	DEBUG_METHOD;
 
 	if(config.exists("fullspeed") && config.value<int>("fullspeed") > 0) {
+
+		msg->message("Fullspeed enabled");
+
 		// Set default motor velocities, accelerations and decelerations for axis 0 - leg A.
 		// TODO: apply original values: V = 5000UL, A = 50000UL
 		Vdefault[0] = 5000UL;
@@ -69,8 +72,8 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 
 		// Set default motor velocities, accelerations and decelerations for axis 1 - leg B.
 		// TODO: apply original values: V = 5000UL, A = 50000UL
-		Vdefault[1] = 1000UL;
-		MotorVmax[1] = 1000UL;
+		Vdefault[1] = 2000UL;
+		MotorVmax[1] = 2000UL;
 		Adefault[1] = 10000UL;
 		Ddefault[1] = 10000UL;
 		MotorAmax[1] = 10000UL;
@@ -84,6 +87,9 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		MotorAmax[2] = 50000UL;
 
 	} else {
+
+		msg->message("Fullspeed NOT enabled");
+
 		// Set default motor velocities, accelerations and decelerations for axis 0 - leg A.
 		Vdefault[0] = 1000UL;
 		MotorVmax[0] = 1000UL;

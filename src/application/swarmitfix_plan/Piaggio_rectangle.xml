@@ -1223,7 +1223,7 @@
         <gamma>3.1415</gamma>
       </Xyz_Euler_Zyz>
     </item>
-    <item type="POST">
+    <item type="SUPPORT">
       <agent>1</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
@@ -1303,7 +1303,7 @@
         <gamma>3.1415</gamma>
       </Xyz_Euler_Zyz>
     </item>
-    <item type="POST">
+    <item type="SUPPORT">
       <agent>2</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
@@ -1383,7 +1383,7 @@
         <gamma>3.1415</gamma>
       </Xyz_Euler_Zyz>
     </item>
-    <item type="POST">
+    <item type="SUPPORT">
       <agent>1</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>
@@ -1463,7 +1463,7 @@
         <gamma>3.1415</gamma>
       </Xyz_Euler_Zyz>
     </item>
-    <item type="POST">
+    <item type="SUPPORT">
       <agent>2</agent>
       <TBeg>0</TBeg>
       <TEnd>1</TEnd>

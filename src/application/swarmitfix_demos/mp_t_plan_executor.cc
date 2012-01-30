@@ -36,6 +36,12 @@ namespace swarmitfix {
 
 void plan_executor::executeCommandItem(const Plan::PkmType::ItemType & pkmCmd)
 {
+	std::stringstream info_stream;
+
+	info_stream << "Executing <pkm> plan <item> with <ind> ";
+	info_stream << pkmCmd.ind();
+	sr_ecp_msg->message(info_stream.str());
+
 	// Make sure that there are only Xyz-Euler-Zyz coordinates.
 	assert(pkmCmd.pkmToWrist().present() == false);
 
@@ -178,6 +184,12 @@ void plan_executor::executeCommandItem(const Plan::PkmType::ItemType & pkmCmd)
 
 void plan_executor::executeCommandItem(const Plan::MbaseType::ItemType & smbCmd, int dir)
 {
+	std::stringstream info_stream;
+
+	info_stream << "Executing <mbase> plan <item> with <ind> ";
+	info_stream << smbCmd.ind();
+	sr_ecp_msg->message(info_stream.str());
+
 	// TODO: Only single-item actions are supported at this time.
 	assert(smbCmd.actions().item().size() == 1);
 

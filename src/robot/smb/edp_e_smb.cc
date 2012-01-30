@@ -162,8 +162,8 @@ void effector::synchronise(void)
 			pkm_rotation_node->setAnalogInputFunctionalitiesExecutionMask(false, false, false);
 
 			// Restore velocity and acceleration limits.
-			pkm_rotation_node->setMaxProfileVelocity(Vdefault[1]/10);
-			pkm_rotation_node->setMaxAcceleration(Adefault[1]/10);
+			pkm_rotation_node->setMaxProfileVelocity(Vdefault[1]);
+			pkm_rotation_node->setMaxAcceleration(Adefault[1]);
 
 			// Step 2: Homing.
 			// Activate homing mode.

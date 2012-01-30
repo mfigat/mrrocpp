@@ -942,7 +942,13 @@ struct ECP_REPLY_PACKAGE
 
 	// TODO: this should be rather union, but it is not possible to union non-POD objects
 	r_buffer reply_package;
+
 	char recognized_command[ECP_2_MP_STRING_SIZE];
+
+	//! Initialize data buffer to avoid problems with serialization.
+	ECP_REPLY_PACKAGE() {
+		recognized_command[0] = 0;
+	}
 
 private:
 	//! Give access to boost::serialization framework

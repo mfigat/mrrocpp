@@ -87,6 +87,9 @@ effector::effector(common::shell &_shell, lib::robot_name_t l_robot_name) :
 		// Increase velocity limits
 		legs_rotation_node->setMotorMaxSpeed(4000);
 		pkm_rotation_node->setMotorMaxSpeed(4000);
+		// Increase profile velocity limits
+		legs_rotation_node->setMaxProfileVelocity(Vdefault[0]);
+		pkm_rotation_node->setMaxProfileVelocity(Vdefault[1]);
 
 		// Collect axes into common array container.
 		axes[0] = &(*legs_rotation_node);

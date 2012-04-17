@@ -114,10 +114,10 @@ void plan_executor::executeCommandItem(const Plan::PkmType::ItemType & pkmCmd)
 	double head_pose = pkmCmd.beta7();
 
 	// Adjust head offset.
-	if(pkmCmd.beta7() < kinematics::shead::model::getLowerJointLimit()) {
+	while(head_pose < kinematics::shead::model::getLowerJointLimit()) {
 		head_pose += M_PI/3;
 	}
-	if(pkmCmd.beta7() > kinematics::shead::model::getUpperJointLimit()) {
+	while(head_pose > kinematics::shead::model::getUpperJointLimit()) {
 		head_pose -= M_PI/3;
 	}
 

@@ -304,6 +304,10 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 				// Send adequate message to the UI.
 				msg->message(string("Epos controlling ") + pkm_rotation_node->getDeviceName()
 						+ string(" rotation is disabled"));
+			} else {
+				// Setup velocity and acceleration limits.
+				pkm_rotation_node->setMaxProfileVelocity(Vdefault[1]);
+				pkm_rotation_node->setMaxAcceleration(Adefault[1]);
 			}
 		}
 

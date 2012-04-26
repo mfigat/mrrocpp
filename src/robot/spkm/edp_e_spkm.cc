@@ -447,6 +447,9 @@ void effector::get_controller_state(lib::c_buffer &instruction_)
 		// Setup velocity hard limit for axis with the "broken" motor.
 		axisB->setMotorMaxSpeed(5000);
 
+		// Setup velocity hard limit for axis with the "broken" motor.
+		axisB->setMaxAcceleration(50000);
+
 		// Set profile velocity limits.
 		for (size_t i = 0; i < axes.size(); ++i) {
 			axes[i]->setMaxProfileVelocity(Vdefault[i]);

@@ -87,6 +87,11 @@ private:
 	 */
 	lib::smb::festo_command_td festo_command;
 
+	/*!
+	 * \brief State, when all legs are 'in' and detached.
+	 */
+	bool all_legs_in_and_detached;
+
 public:
 	/*!
 	 * \brief festo_and_inputs constructor

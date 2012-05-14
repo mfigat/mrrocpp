@@ -27,7 +27,8 @@ festo_and_inputs::festo_and_inputs(effector &_master) :
 		master(_master),
 		epos_di_node(master.legs_rotation_node),
 		cpv10(master.cpv10),
-		robot_test_mode(master.robot_test_mode)
+		robot_test_mode(master.robot_test_mode),
+		all_legs_in_and_detached(false)
 {
 	if (!(robot_test_mode)) {
 		// prepares hardware
@@ -800,6 +801,9 @@ void festo_and_inputs::command_all_in()
 
 					}
 				}
+
+				// After ALL_OUT->ALL_IN transition all legs are attached.
+				all_legs_in_and_detached = false;
 			}
 			break;
 		case lib::smb::ONE_IN_TWO_OUT:
@@ -807,7 +811,20 @@ void festo_and_inputs::command_all_in()
 			BOOST_THROW_EXCEPTION(mrrocpp::edp::smb::nfe_invalid_command_in_given_state()<<current_state(current_legs_state) << retrieved_festo_command(lib::smb::ALL_IN));
 			break;
 		case lib::smb::ALL_IN:
-			// Do nothing.
+			// Detach/undetach.
+			if (!test_mode_set_reply()) {
+
+				// Setup command.
+				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; ++i) {
+					set_detach(i + 1, !all_legs_in_and_detached);
+				}
+
+				// Send command to hardware.
+				execute_command();
+
+				// Toggle the flag.
+				all_legs_in_and_detached = !all_legs_in_and_detached;
+			}
 			break;
 		default:
 			BOOST_THROW_EXCEPTION(unexpected_case_within_switch());

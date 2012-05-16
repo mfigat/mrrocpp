@@ -521,14 +521,17 @@ void festo_and_inputs::command_all_out()
 			if (!test_mode_set_reply()) {
 
 				// moves all legs down and does not detach them !
+				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
+					set_detach(i + 1, false);
+					set_clean(i + 1, false);
+				}
+				execute_command();
+				delay(500);
 
 				for (int i = 0; i < lib::smb::LEG_CLAMP_NUMBER; i++) {
 					set_move_out(i + 1, true);
 					set_move_in(i + 1, false);
-					set_detach(i + 1, false);
-					set_clean(i + 1, false);
 				}
-
 				execute_command();
 
 				// waits until all legs are in down position
